@@ -1,0 +1,1338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>HKDSE M1 Chapter 10: Discrete Probability Distributions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Core Tokens & Layout */
+:root{
+  --paper:#F3F5F9; --surface:#FFFFFF; --sunk:#E9EDF4; --ink:#15213A; --ink-2:#47546E; --ink-3:#7A869B; --line:#D5DBE6; --grid:rgba(55,85,150,.075);
+  --violet:#5F35CC; --violet-soft:#ECE6FC; --on-violet:#FFFFFF;
+  --amber:#AD6B00; --amber-soft:#FFF1D4;
+  --teal:#0A7C6F; --teal-soft:#D9F1EC;
+  --red:#BF372D; --red-soft:#FBE3E0;
+  --font-display:'Archivo','Arial Narrow',system-ui,sans-serif;
+  --font-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root{
+  --paper:#0D131E; --surface:#151D2C; --sunk:#1C2638; --ink:#E6EAF2; --ink-2:#AAB4C7; --ink-3:#77839A; --line:#2A3549; --grid:rgba(150,175,230,.05);
+  --violet:#A88CFF; --violet-soft:#272050; --on-violet:#140C2E;
+  --amber:#F0B44A; --amber-soft:#3A2D12;
+  --teal:#44C6B3; --teal-soft:#113430;
+  --red:#F27E74; --red-soft:#401F1C;
+  color-scheme:dark}}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6;margin:0;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 40px}
+.app{display:grid;grid-template-columns:275px minmax(0,1fr);gap:32px;max-width:1300px;margin:0 auto}
+
+/* Sidebar Navigation */
+.rail{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));align-self:start;max-height:calc(100vh - 32px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 12px 14px}
+.brand{padding:0 8px 12px;border-bottom:1px solid var(--line);margin-bottom:10px;display:flex;flex-direction:column;gap:6px}
+.brand .eyebrow{margin:0;font-family:var(--font-mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;color:var(--violet);font-weight:600}
+.brand h2{font-family:var(--font-display);font-weight:800;font-size:1.15rem;line-height:1.2;margin:0}
+.prog{display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:.74rem;color:var(--ink-2);margin-top:4px}
+.prog .track{flex:1;height:6px;border-radius:3px;background:var(--sunk);overflow:hidden}
+.prog .fill{height:100%;background:var(--teal);width:0;transition:width .4s}
+.nav ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.nav a{display:grid;grid-template-columns:24px 1fr 16px;align-items:center;gap:8px;padding:8px 8px;border-radius:8px;color:var(--ink-2);text-decoration:none;font-size:.88rem;line-height:1.3}
+.nav a .n{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-3);text-align:center;border:1px solid var(--line);border-radius:6px;padding:1px 0}
+.nav a .tick{color:var(--teal);font-size:.85rem;visibility:hidden}
+.nav a.done .tick{visibility:visible}
+.nav a:hover{background:var(--sunk);color:var(--ink)}
+.nav a[aria-current="page"]{background:var(--violet-soft);color:var(--ink);font-weight:600}
+.nav a[aria-current="page"] .n{border-color:var(--violet);color:var(--violet)}
+
+/* Content Structure */
+main{min-width:0}
+.view{max-width:940px;display:flex;flex-direction:column;gap:18px;padding-block:4px 30px}
+.view > *{margin:0}
+.page{display:flex;flex-direction:column;gap:16px;min-width:0}
+.page > *{margin:0}
+.eyebrow{font-family:var(--font-mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;color:var(--violet);font-weight:600}
+h1{font-family:var(--font-display);font-weight:800;font-size:clamp(1.7rem,3.8vw,2.35rem);line-height:1.12;margin:0}
+h2{font-family:var(--font-display);font-weight:750;font-size:1.3rem;line-height:1.2;margin:0}
+h3{font-family:var(--font-display);font-weight:700;font-size:1.05rem;line-height:1.3;margin:0}
+p{max-width:68ch}
+.lead{font-size:1.05rem;color:var(--ink-2)}
+.head{display:flex;flex-direction:column;gap:6px}
+.tb{font-family:var(--font-mono);font-size:.72rem;color:var(--ink-2);background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.term{font-weight:600}
+.muted{color:var(--ink-2)}
+.small{font-size:.88rem}
+
+/* Sub-nav Tabs */
+.subnav{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.sp{font:inherit;font-size:.82rem;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:.26em .75em .26em .3em;cursor:pointer;line-height:1.3}
+.sp .k{font-family:var(--font-mono);font-size:.68rem;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;background:var(--sunk);color:var(--ink-3)}
+.sp.seen .k{background:var(--teal-soft);color:var(--teal)}
+.sp.ex .k{background:var(--amber-soft);color:var(--amber)}
+.sp[aria-current="true"]{border-color:var(--violet);background:var(--violet-soft);color:var(--ink);font-weight:600}
+.sp[aria-current="true"] .k{background:var(--violet);color:var(--on-violet)}
+.page-foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:16px;margin-top:10px}
+
+/* Panels, Labs & Definitions */
+.lab{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.lab-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.tag{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--on-violet);background:var(--violet);border-radius:5px;padding:2px 7px}
+.tag.amber{background:var(--amber);color:var(--surface)}
+.tag.teal{background:var(--teal);color:var(--surface)}
+.svgwrap{overflow-x:auto}
+.svgwrap svg{display:block;width:100%;height:auto}
+.defn{overflow-wrap:anywhere;min-width:0;background:var(--violet-soft);border-radius:12px;padding:14px 18px;display:flex;flex-direction:column;gap:8px}
+.defn > .lbl{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;color:var(--violet);font-weight:600}
+.defn p{margin:0}
+
+/* Notes & Warnings */
+details.note{border-radius:12px;padding:0;background:var(--surface);border:1px solid var(--line)}
+details.note > summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:10px 14px;font-weight:600;font-size:.92rem}
+details.note > summary::-webkit-details-marker{display:none}
+details.note > summary::before{content:"+";font-family:var(--font-mono);width:20px;height:20px;border-radius:5px;display:grid;place-items:center;font-size:.9rem;flex:none}
+details.note[open] > summary::before{content:"−"}
+details.note > .body{padding:0 16px 14px 44px;display:flex;flex-direction:column;gap:8px;font-size:.94rem}
+details.note > .body > *{margin:0}
+details.tip > summary::before{background:var(--amber-soft);color:var(--amber)}
+details.tip > summary .lb{color:var(--amber)}
+details.warn > summary::before{background:var(--red-soft);color:var(--red)}
+details.warn > summary .lb{color:var(--red)}
+.lb{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+
+/* Buttons & UI Controls */
+.btn{font:inherit;font-size:.88rem;font-weight:500;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:.42em .85em;cursor:pointer;line-height:1.3;transition:background .15s,border-color .15s}
+.btn:hover{border-color:var(--ink-3);background:var(--sunk)}
+.btn.primary{background:var(--violet);border-color:var(--violet);color:var(--on-violet)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink-2)}
+.btn.ghost:hover{background:var(--sunk)}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+input[type=range]{width:100%;accent-color:var(--violet)}
+.slider{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.slider label{font-family:var(--font-mono);font-size:.84rem}
+.slider output{font-family:var(--font-mono);font-size:.9rem;min-width:3em;text-align:right}
+
+/* Tables & Math */
+.dt{border-collapse:collapse;font-variant-numeric:tabular-nums;margin:0 auto;width:100%}
+.dt th,.dt td{border:1px solid var(--line);padding:6px 11px;text-align:center;min-width:48px}
+.dt th{font-family:var(--font-mono);font-weight:500;font-size:.8rem;background:var(--sunk);color:var(--ink-2);white-space:nowrap}
+.dtwrap{overflow-x:auto;max-width:100%}
+mjx-container[display="true"]{margin:.35em 0 !important}
+
+/* Interactive Step Players */
+.player{display:flex;flex-direction:column;gap:12px}
+.pq{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.pq .qh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.pq p{margin:0}
+.pq ol.parts{list-style:none;padding-left:0;margin:0;display:flex;flex-direction:column;gap:4px}
+.pq ol.parts > li{display:grid;grid-template-columns:2.2em 1fr;gap:2px}
+.pmain{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:16px;align-items:start}
+.pviz{position:sticky;top:calc(16px + env(safe-area-inset-top,0px));background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;z-index:2}
+.pviz svg{display:block;width:100%;height:auto}
+.pwork{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.pwork > li{visibility:hidden;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s ease,opacity .35s,margin .3s;margin:0;scroll-margin-top:24px}
+.pwork > li.on{visibility:visible;max-height:60em;opacity:1;margin-bottom:10px}
+.pwork .w{border-left:3px solid var(--line);padding:4px 0 4px 12px;overflow-x:auto;transition:border-color .3s,background .3s}
+.pwork .w p{margin:.1em 0}
+.pwork li.cur .w{border-left-color:var(--violet);background:linear-gradient(90deg,var(--violet-soft),transparent 75%)}
+.pwork .why{max-height:0;opacity:0;overflow:hidden;transition:max-height .45s ease,opacity .35s,margin .3s;font-size:.88rem;color:var(--ink-2);margin-left:15px}
+.pwork li.cur .why{max-height:30em;opacity:1;margin-top:6px}
+.pwork .why > div{background:var(--amber-soft);border-radius:8px;padding:7px 11px;color:var(--ink)}
+.pwork .why > div::before{content:"Why: ";font-family:var(--font-mono);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;color:var(--amber);font-weight:600}
+.pempty{border:1.5px dashed var(--line);border-radius:12px;padding:14px;color:var(--ink-2);font-size:.92rem;margin:0}
+.pctl{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:3;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px;box-shadow:0 4px 16px rgba(10,20,40,.08)}
+.dots{display:flex;gap:4px;align-items:center}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .25s}
+.dots i.on{background:var(--violet)}
+@media (max-width:760px){.pmain{grid-template-columns:minmax(0,1fr)}}
+
+/* SVG Shared Styling */
+svg text{font-family:var(--font-body);fill:var(--ink)}
+svg .axis{stroke:var(--ink-3);stroke-width:1.5;fill:none}
+svg .lbl{fill:var(--ink-2);font-size:13px}
+svg .lbl-s{fill:var(--ink-3);font-size:11px;font-family:var(--font-mono)}
+svg .vt{font-size:13px;font-weight:600;fill:var(--ink)}
+svg .note{fill:var(--amber);font-weight:600;font-size:12px}
+svg .bar-v{fill:var(--violet)}
+svg .bar-a{fill:var(--amber)}
+svg .bar-t{fill:var(--teal)}
+svg .bar-r{fill:var(--red)}
+svg .bar-g{fill:var(--ink-3)}
+.fd{opacity:0;transition:opacity .45s}
+.fd.in{opacity:1}
+
+/* Tree Diagram Styling */
+.tree-branch{stroke:var(--line);stroke-width:1.6;fill:none;transition:stroke .3s,stroke-width .3s}
+.tree-branch.hl-teal{stroke:var(--teal);stroke-width:2.5}
+.tree-branch.hl-amber{stroke:var(--amber);stroke-width:2.5}
+.tree-lbl{transition:fill .3s,font-weight .3s}
+.tree-lbl.hl-teal{fill:var(--teal);font-weight:700}
+.tree-lbl.hl-amber{fill:var(--amber);font-weight:700}
+
+/* Check Quizzes */
+.qcard{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.qcard .qh{display:flex;gap:10px;align-items:baseline}
+.qcard .qn{font-family:var(--font-mono);font-size:.78rem;color:var(--violet);white-space:nowrap}
+.qopts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:8px}
+.qopt{text-align:left}
+.qopt.right{background:var(--teal-soft);border-color:var(--teal)}
+.qopt.wrong{background:var(--red-soft);border-color:var(--red)}
+.qin{display:flex;gap:8px;flex-wrap:wrap}
+.qin input{font:inherit;font-family:var(--font-mono);padding:.4em .6em;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);width:9em}
+.qfb{font-size:.88rem;border-radius:8px;padding:8px 12px}
+.qfb.ok{background:var(--teal-soft)} .qfb.no{background:var(--red-soft)}
+.score{font-family:var(--font-display);font-weight:800;font-size:1.6rem}
+textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);resize:vertical}
+
+/* Exploration Callout Card */
+.guide-card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:.9rem}
+.guide-card h4{margin:0 0 4px;font-size:.92rem;color:var(--violet)}
+.guide-card p{margin:0}
+
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr);gap:16px}
+  .rail{position:static;max-height:none;border-radius:12px;padding:10px 8px 8px}
+  .brand{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;padding:0 6px 8px;margin-bottom:6px}
+  .brand .eyebrow{display:none}
+  .nav ol{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:4px}
+  .nav a{white-space:nowrap;grid-template-columns:auto auto auto;gap:6px;padding:6px 9px}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+<aside class="rail" aria-label="Chapter sections">
+  <div class="brand">
+    <p class="eyebrow">HKDSE M1 · Chapter 10</p>
+    <h2>Discrete Distributions</h2>
+    <div class="prog"><div class="track"><div class="fill" id="progFill"></div></div><span id="progTxt">0/5</span></div>
+  </div>
+  <nav class="nav"><ol id="navList"></ol></nav>
+</aside>
+
+<main>
+
+<!-- ===================== START & REVIEW ===================== -->
+<section class="view" id="v-start" data-title="Start here">
+  <div class="page" data-key="home" data-label="Start">
+    <div class="head">
+      <p class="eyebrow">Pre-lesson & Chapter Guide</p>
+      <h1>Discrete Probability Distributions</h1>
+      <p class="lead">From individual trials to continuous intervals: Master the <strong>Bernoulli</strong>, <strong>Binomial</strong>, and <strong>Poisson</strong> models across all 16 textbook examples.</p>
+    </div>
+    <div class="lab">
+      <div class="svgwrap">
+        <svg viewBox="0 0 540 180" role="img" aria-label="Overview of Bernoulli, Binomial, and Poisson">
+          <!-- Bernoulli -->
+          <rect x="40" y="110" width="18" height="40" class="bar-v"/>
+          <rect x="70" y="70" width="18" height="80" class="bar-v"/>
+          <line class="axis" x1="20" x2="110" y1="150" y2="150"/>
+          <text class="lbl-s" x="49" y="165" text-anchor="middle">0</text>
+          <text class="lbl-s" x="79" y="165" text-anchor="middle">1</text>
+          <text class="vt" x="65" y="35" text-anchor="middle">Bernoulli</text>
+          <text class="lbl-s" x="65" y="52" text-anchor="middle">1 trial</text>
+
+          <!-- Binomial -->
+          <rect x="180" y="130" width="14" height="20" class="bar-v"/>
+          <rect x="200" y="90" width="14" height="60" class="bar-v"/>
+          <rect x="220" y="60" width="14" height="90" class="bar-v"/>
+          <rect x="240" y="80" width="14" height="70" class="bar-v"/>
+          <rect x="260" y="120" width="14" height="30" class="bar-v"/>
+          <line class="axis" x1="165" x2="295" y1="150" y2="150"/>
+          <text class="vt" x="230" y="35" text-anchor="middle">Binomial B(n, p)</text>
+          <text class="lbl-s" x="230" y="52" text-anchor="middle">n independent trials</text>
+
+          <!-- Poisson -->
+          <path d="M 370 140 Q 400 30 430 80 T 500 150" fill="none" stroke="var(--amber)" stroke-width="2" stroke-dasharray="4 3"/>
+          <circle cx="370" cy="140" r="4" class="bar-a"/>
+          <circle cx="395" cy="70" r="4" class="bar-a"/>
+          <circle cx="420" cy="65" r="4" class="bar-a"/>
+          <circle cx="445" cy="90" r="4" class="bar-a"/>
+          <circle cx="470" cy="125" r="4" class="bar-a"/>
+          <circle cx="495" cy="145" r="4" class="bar-a"/>
+          <line class="axis" x1="350" x2="520" y1="150" y2="150"/>
+          <text class="vt" x="435" y="35" text-anchor="middle">Poisson Po(λ)</text>
+          <text class="lbl-s" x="435" y="52" text-anchor="middle">Rate in continuous space</text>
+        </svg>
+      </div>
+    </div>
+    <h2>Curriculum Learning Targets</h2>
+    <div class="defn">
+      <p>• <strong>LU 11.1 / 12.1:</strong> Recognise Bernoulli, Binomial, and Poisson probability functions.</p>
+      <p>• <strong>LU 12.2:</strong> Compute and apply their expectations and variances: \(E(X)\) and \(\operatorname{Var}(X)\).</p>
+      <p>• <strong>LU 12.3:</strong> Formulate layered decision models and sequential stopping rules.</p>
+    </div>
+  </div>
+
+  <div class="page" data-key="review" data-label="Quick Review">
+    <div class="head">
+      <p class="eyebrow">Prerequisites</p>
+      <h1>Total Probability & Bayes' Theorem</h1>
+    </div>
+    <div class="defn">
+      <span class="lbl">Law of Total Probability</span>
+      \[P(B) = \sum_{i=1}^n P(A_i \cap B) = \sum_{i=1}^n P(A_i)P(B|A_i)\]
+      <span class="lbl" style="margin-top:8px">Bayes' Theorem</span>
+      \[P(A_k|B) = \frac{P(A_k \cap B)}{P(B)} = \frac{P(A_k)P(B|A_k)}{\sum_{i=1}^n P(A_i)P(B|A_i)}\]
+    </div>
+    <details class="note tip" open><summary><span class="lb">Crucial Link for Chapter 10</span></summary><div class="body">
+      <p>Many multi-step exam questions in Chapter 10 require you to calculate probabilities using Binomial or Poisson models first, and then apply Bayes' theorem to reverse the condition.</p>
+    </div></details>
+  </div>
+</section>
+
+<!-- ===================== BERNOULLI ===================== -->
+<section class="view" id="v-bern" data-title="Bernoulli Distribution" hidden>
+  <div class="head"><p class="eyebrow">Section 10.1A</p><h1>Bernoulli Distribution</h1></div>
+
+  <div class="page" data-key="idea" data-label="Concepts">
+    <p>A <span class="term">Bernoulli trial</span> is an experiment with exactly two outcomes: <em>success</em> (\(X=1\)) with probability \(p\), and <em>failure</em> (\(X=0\)) with probability \(1-p\).</p>
+    <div class="defn">
+      <span class="lbl">Probability Function</span>
+      \[P(X=x) = p^x (1-p)^{1-x} \quad \text{for } x = 0, 1\]
+      <hr style="border:0;border-top:1px solid var(--line);margin:8px 0">
+      <p><strong>Mean and Variance:</strong></p>
+      \[\mu = E(X) = p \qquad\text{and}\qquad \sigma^2 = \operatorname{Var}(X) = p(1-p)\]
+    </div>
+
+    <!-- Real-life Bernoulli Experiments Simulation -->
+    <div class="lab">
+      <div class="lab-h"><span class="tag teal">Interactive Experiment</span><h3>Everyday Bernoulli Trials</h3></div>
+      <p class="small muted">Random experiments with only two possible outcomes are Bernoulli trials. Select an experiment and simulate it:</p>
+      <div class="row">
+        <button class="btn primary" id="btnExpCoin">Coin Toss (Head / Tail)</button>
+        <button class="btn" id="btnExpTarget">Target Shot (Hit / Miss)</button>
+        <button class="btn" id="btnExpQC">Manufactured Item (Defective / Normal)</button>
+        <button class="btn" id="btnExpMC">Guessing 4-Choice MC (Correct / Incorrect)</button>
+      </div>
+      <div class="svgwrap">
+        <svg viewBox="0 0 500 120" id="svgBernSim">
+          <rect x="20" y="20" width="460" height="80" rx="10" fill="var(--sunk)" stroke="var(--line)"/>
+          <text x="250" y="55" class="vt" id="simExpTitle" text-anchor="middle">Throw a fair coin</text>
+          <text x="250" y="80" class="note" id="simExpResult" text-anchor="middle">Click "Run Single Trial" below</text>
+        </svg>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="btnRunTrial">Run Single Trial ▶</button>
+        <span class="small muted" id="simTally">Trials: 0 | Successes (X = 1): 0 | Failures (X = 0): 0</span>
+      </div>
+    </div>
+
+    <!-- Formula Derivation Accordion -->
+    <details class="note tip"><summary><span class="lb">Derivation</span> How we derive the Bernoulli Mean & Variance</summary><div class="body">
+      <p>By definition of expectation for a discrete random variable:</p>
+      \[E(X) = \sum x P(X=x) = 0 \cdot P(X=0) + 1 \cdot P(X=1) = 0(1-p) + 1(p) = p\]
+      <p>For the variance, we first find \(E(X^2)\):</p>
+      \[E(X^2) = \sum x^2 P(X=x) = 0^2(1-p) + 1^2(p) = p\]
+      <p>Then applying \(\operatorname{Var}(X) = E(X^2) - [E(X)]^2\):</p>
+      \[\operatorname{Var}(X) = p - p^2 = p(1-p)\]
+    </div></details>
+  </div>
+
+  <!-- Example 10.1 -->
+  <div class="page" data-key="ex101" data-label="Example 10.1" data-ex="1">
+    <div class="player" data-viz="ex101">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.1</span><h3>Find the mean and variance of a Bernoulli distribution</h3></div>
+        <p>One card is chosen at random from a pack of 52 playing cards (without jokers). Let \(X\) be the random variable representing the number of spades obtained.</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Represent the probability distribution of \(X\) by (i) a table, (ii) a formula, (iii) a bar chart.</span></li>
+          <li><b>(b)</b><span>Find the mean and variance of \(X\).</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex101"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>\(X\) has only two possible values: 0 and 1. \(X\) follows a Bernoulli distribution with the probability of success equal to \(P(\text{A spade})\).</p></div><div class="why"><div>A single draw with two mutually exclusive outcomes is a Bernoulli trial.</div></div></li>
+            <li><div class="w">\[P(X=1) = \frac{13}{52} = \frac{1}{4}, \quad P(X=0) = 1 - \frac{1}{4} = \frac{3}{4}\]</div><div class="why"><div>Identify the parameter \(p\) and \(1-p\).</div></div></li>
+            <li><div class="w"><p>(a)(i) The probability distribution of \(X\) is as follows:</p><div class="dtwrap"><table class="dt"><tr><th>\(x\)</th><td>0</td><td>1</td></tr><tr><th>\(P(X=x)\)</th><td>\(3/4\)</td><td>\(1/4\)</td></tr></table></div></div><div class="why"><div>All probabilities are non-negative and sum to 1: \(3/4 + 1/4 = 1\).</div></div></li>
+            <li><div class="w"><p>(a)(ii) \(P(X=x) = \left(\frac{1}{4}\right)^x \left(\frac{3}{4}\right)^{1-x}\) for \(x=0, 1\).</p></div><div class="why"><div>Always specify the domain "\(x=0, 1\)" to make the formula complete.</div></div></li>
+            <li><div class="w">\[\text{(b)}\quad \text{Mean of } X = p = E(X) = \underline{\frac{1}{4}}\]</div><div class="why"><div>Use the derived property \(E(X) = p\) directly.</div></div></li>
+            <li><div class="w">\[\text{Variance of } X = p(1-p) = \left(\frac{1}{4}\right)\left(\frac{3}{4}\right) = \underline{\frac{3}{16}}\]</div><div class="why"><div>Use the derived property \(\operatorname{Var}(X) = p(1-p)\).</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.2 -->
+  <div class="page" data-key="ex102" data-label="Example 10.2" data-ex="1">
+    <div class="player" data-viz="ex102">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.2</span><h3>Find the parameter, E(X) and Var(X) from a given Bernoulli distribution</h3></div>
+        <p>The probability distribution of a Bernoulli variable \(X\) is given by \(P(X=x) = k^x (0.27)^{1-x}\) for \(x=0, 1\).</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Find the value of \(k\).</span></li>
+          <li><b>(b)</b><span>Find the mean and variance of \(X\).</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex102"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w">\[\text{(a)}\quad P(X=0) = 0.27, \quad P(X=1) = k\]</div><div class="why"><div>Substitute \(x=0\) and \(x=1\) into the formula. Any non-zero base raised to the power of 0 equals 1.</div></div></li>
+            <li><div class="w">\[0.27 + k = 1 \implies k = \underline{0.73}\]</div><div class="why"><div>Probabilities over the entire sample space must sum to 1. Thus \(p = 0.73\).</div></div></li>
+            <li><div class="w"><p>(b) From (a), the probability distribution of \(X\) is \(P(X=x) = (0.73)^x(0.27)^{1-x}\) for \(x=0, 1\).</p>\[\text{Mean of } X = p = \underline{0.73}\]</div><div class="why"><div>Mean equals \(p\).</div></div></li>
+            <li><div class="w">\[\text{Variance of } X = p(1-p) = (0.73)(0.27) = \underline{0.1971}\]</div><div class="why"><div>Variance equals \(p(1-p)\).</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" data-key="check" data-label="Check"><div class="check" data-sec="bernoulli"></div></div>
+</section>
+
+<!-- ===================== BINOMIAL ===================== -->
+<section class="view" id="v-bino" data-title="Binomial Distribution B(n, p)" hidden>
+  <div class="head"><p class="eyebrow">Section 10.1B & C</p><h1>Binomial Distribution <i>B</i>(<i>n</i>, <i>p</i>)</h1></div>
+
+  <div class="page" data-key="idea" data-label="Concepts">
+    <p>When a Bernoulli trial with success probability \(p\) is repeated \(n\) times <strong>independently</strong>, the number of successes \(X\) is a binomial variable:</p>
+    <div class="defn">
+      <span class="lbl">Binomial Distribution \(B(n, p)\)</span>
+      \[P(X=x) = C_x^n p^x (1-p)^{n-x} \quad \text{for } x = 0, 1, 2, \dots, n\]
+      <hr style="border:0;border-top:1px solid var(--line);margin:8px 0">
+      <p><strong>Mean and Variance:</strong></p>
+      \[\mu = E(X) = np \qquad\text{and}\qquad \sigma^2 = \operatorname{Var}(X) = np(1-p)\]
+    </div>
+
+    <!-- Derivation based on Class Activity 10.1 -->
+    <details class="note tip" open><summary><span class="lb">Derivation</span> How we derive the Binomial Formula (Class Activity 10.1)</summary><div class="body">
+      <p>Consider tossing a coin \(n=3\) times where \(P(\text{Head}) = p\) and \(P(\text{Tail}) = 1-p\):</p>
+      <ol style="margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:4px">
+        <li>Any single specific outcome with \(x\) heads and \((n-x)\) tails (e.g. \(H, T, T\)) has probability \(p^x (1-p)^{n-x}\) because trials are independent.</li>
+        <li>How many ways can we arrange \(x\) heads among \(n\) trials? This is equivalent to putting \(x\) letters \(H\) into \(n\) ordered slots: \(C_x^n\) ways.</li>
+        <li>Multiplying the count of ways by the probability of each way yields:
+          \[P(X=x) = C_x^n p^x (1-p)^{n-x}\]
+        </li>
+        <li><strong>Sum of probabilities:</strong> By the Binomial Theorem:
+          \[\sum_{x=0}^n P(X=x) = \sum_{x=0}^n C_x^n p^x (1-p)^{n-x} = [p + (1-p)]^n = 1^n = 1\]
+        </li>
+      </ol>
+    </div></details>
+
+    <!-- Guided Exploration -->
+    <div class="lab">
+      <div class="lab-h"><span class="tag teal">Interactive Exploration</span><h3>Distribution Shape & Skewness</h3></div>
+      
+      <div class="grid2">
+        <div class="guide-card">
+          <h4>Exploration Tasks:</h4>
+          <p><strong>1. Symmetrical:</strong> Click "Set p = 0.5". Notice the bars peak at the center.</p>
+          <p><strong>2. Skewed Right:</strong> Click "Set p = 0.2". The peak shifts left; tail stretches right.</p>
+          <p><strong>3. Skewed Left:</strong> Click "Set p = 0.75". The peak shifts right; tail stretches left.</p>
+          <p><strong>4. Large n:</strong> Increase \(n\) to 20. The distribution becomes more bell-shaped.</p>
+        </div>
+        <div class="guide-card" style="background:var(--amber-soft);border-color:var(--amber)">
+          <h4 style="color:var(--amber)">Conclusion of Exploration:</h4>
+          <p>• When \(p = 0.5\), the binomial distribution is <strong>symmetrical</strong>.</p>
+          <p>• When \(p < 0.5\), the distribution is <strong>skewed to the right</strong>.</p>
+          <p>• When \(p > 0.5\), the distribution is <strong>skewed to the left</strong>.</p>
+          <p>• As \(n\) increases, the distribution becomes more symmetrical and bell-shaped.</p>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:6px">
+        <button class="btn" id="btnPresetSym">Set p = 0.5 (Symmetrical)</button>
+        <button class="btn" id="btnPresetRight">Set p = 0.2 (Skewed Right)</button>
+        <button class="btn" id="btnPresetLeft">Set p = 0.75 (Skewed Left)</button>
+        <button class="btn" id="btnPresetLarge">Set n = 20 (Large n)</button>
+      </div>
+
+      <div class="slider"><label for="bnSl">Trials \(n\):</label><input type="range" id="bnSl" min="2" max="20" step="1" value="8"><output id="bnOut">8</output></div>
+      <div class="slider"><label for="bpSl">Prob \(p\):</label><input type="range" id="bpSl" min="0.05" max="0.95" step="0.05" value="0.4"><output id="bpOut">0.40</output></div>
+      <div class="svgwrap"><svg id="binoDynSvg" viewBox="0 0 500 190"></svg></div>
+      <p class="caption small" id="binoStat"></p>
+    </div>
+  </div>
+
+  <!-- Example 10.3 -->
+  <div class="page" data-key="ex103" data-label="Example 10.3" data-ex="1">
+    <div class="player" data-viz="ex103">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.3</span><h3>Find probabilities, E(X) and Var(X) from a given binomial distribution</h3></div>
+        <p>It is given that a random variable \(X \sim B(4, 0.6)\).</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Represent the probability distribution of \(X\) by a table.</span></li>
+          <li><b>(b)</b><span>Find \(P(1 \le X \le 2)\) and \(P(X > 0)\).</span></li>
+          <li><b>(c)</b><span>Find \(E(X)\) and \(\operatorname{Var}(X)\).</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex103"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>\(X \sim B(4, 0.6) \implies P(X=x) = C_x^4 (0.6)^x (0.4)^{4-x}\) for \(x=0, 1, 2, 3, 4\).</p></div><div class="why"><div>Substitute the parameters \(n=4\) and \(p=0.6\) into the general formula.</div></div></li>
+            <li><div class="w"><p>\(P(X=0) = (0.4)^4 = 0.0256\)<br>\(P(X=1) = C_1^4(0.6)(0.4)^3 = 0.1536\)<br>\(P(X=2) = C_2^4(0.6)^2(0.4)^2 = 0.3456\)<br>\(P(X=3) = C_3^4(0.6)^3(0.4) = 0.3456\)<br>\(P(X=4) = (0.6)^4 = 0.1296\)</p></div><div class="why"><div>Evaluate each term to build the table.</div></div></li>
+            <li><div class="w"><p>(a) The probability distribution of \(X\) is as follows:</p><div class="dtwrap"><table class="dt"><tr><th>\(x\)</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>\(P(X=x)\)</th><td>0.0256</td><td>0.1536</td><td>0.3456</td><td>0.3456</td><td>0.1296</td></tr></table></div></div><div class="why"><div>Table representations must contain all possible values of \(x\) and their corresponding probabilities.</div></div></li>
+            <li><div class="w">\[\text{(b)}\quad P(1 \le X \le 2) = P(X=1) + P(X=2) = 0.1536 + 0.3456 = \underline{0.4992}\]</div><div class="why"><div>Events \(X=1\) and \(X=2\) are mutually exclusive, so add their probabilities.</div></div></li>
+            <li><div class="w">\[P(X > 0) = 1 - P(X=0) = 1 - 0.0256 = \underline{0.9744}\]</div><div class="why"><div>Complement rule: subtracting \(P(X=0)\) is much faster than summing 4 terms.</div></div></li>
+            <li><div class="w">\[\text{(c)}\quad E(X) = np = 4(0.6) = \underline{2.4}\]\[\operatorname{Var}(X) = np(1-p) = 4(0.6)(0.4) = \underline{0.96}\]</div><div class="why"><div>Directly apply the binomial expectation and variance formulas.</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.4 -->
+  <div class="page" data-key="ex104" data-label="Example 10.4" data-ex="1">
+    <div class="player" data-viz="ex104">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.4</span><h3>Find the parameter and unknown constant from a given binomial distribution</h3></div>
+        <p>It is given that a random variable \(X \sim B(4, p)\) where \(0 < p < 0.5\) and \(\operatorname{Var}(X) = \frac{8}{9}\).</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Find the value of \(p\).</span></li>
+          <li><b>(b)</b><span>Find \(E(X)\).</span></li>
+          <li><b>(c)</b><span>It is given that \(k\) is an integer. Find the greatest value of \(k\) such that \(P(X < k) < 0.9\).</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex104"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w">\[\text{(a)}\quad \operatorname{Var}(X) = \frac{8}{9}\]\[4p(1-p) = \frac{8}{9}\]</div><div class="why"><div>Substitute \(n=4\) and variance into the formula \(\operatorname{Var}(X) = np(1-p)\).</div></div></li>
+            <li><div class="w">\[9p^2 - 9p + 2 = 0 \implies (3p-1)(3p-2) = 0\]</div><div class="why"><div>Expand into standard quadratic form.</div></div></li>
+            <li><div class="w">\[p = \underline{\frac{1}{3}} \quad\text{or}\quad \frac{2}{3} \text{ (rejected)}\]</div><div class="why"><div>Always test constraints explicitly. Reject \(2/3\) since \(0 < p < 0.5\).</div></div></li>
+            <li><div class="w">\[\text{(b)}\quad E(X) = np = 4\left(\frac{1}{3}\right) = \underline{\frac{4}{3}}\]</div><div class="why"><div>Substitute \(n\) and \(p\) into the expected value formula.</div></div></li>
+            <li><div class="w">\[\text{(c)}\quad P(X < 4) = 1 - P(X=4) = 1 - \left(\frac{1}{3}\right)^4 = 0.9877 \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Calculate cumulative probabilities downwards from the maximum value \(n=4\).</div></div></li>
+            <li><div class="w">\[P(X < 3) = 1 - P(X=4) - P(X=3)\]\[= 1 - \left(\frac{1}{3}\right)^4 - C_3^4\left(\frac{1}{3}\right)^3\left(\frac{2}{3}\right) = 0.8889 \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Check the next integer down.</div></div></li>
+            <li><div class="w"><p>\(P(X < 3) < 0.9\) and \(P(X < 4) > 0.9\).</p><p>The greatest value of \(k\) is <u>3</u>.</p></div><div class="why"><div>\(k=3\) is the highest integer satisfying the strict inequality \(< 0.9\).</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.5 -->
+  <div class="page" data-key="ex105" data-label="Example 10.5" data-ex="1">
+    <div class="player" data-viz="ex105">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.5</span><h3>Problem involving a binomial distribution</h3></div>
+        <p>In a summer, the probability of having a rainy day is \(3/5\). It is known that the weather in any day is independent of the weather in the other days. Let \(X\) be the number of rainy days in a summer week.</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Represent the probability distribution of \(X\) by a formula.</span></li>
+          <li><b>(b)</b><span>Find the probabilities that, in a summer week, there are (i) exactly 3 rainy days, (ii) less than 2 rainy days, (iii) at most 5 rainy days.</span></li>
+          <li><b>(c)</b><span>Find the mean and variance of the number of rainy days in a summer week.<br>(Give your answers correct to 4 decimal places if necessary.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex105"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>There are 7 identical and independent Bernoulli trials (i.e. the 7 days in a summer week). \(X\) is the number of successes (i.e. rainy days) in these 7 trials.</p><p>\(\therefore X\) follows a binomial distribution. \(X \sim B\left(7, \frac{3}{5}\right)\)</p></div><div class="why"><div>Establish the parameters first. The trials (days) are independent.</div></div></li>
+            <li><div class="w">\[\text{(a)}\quad \text{The probability distribution of } X \text{ is }\]\[P(X=x) = C_x^7 \left(\frac{3}{5}\right)^x \left(\frac{2}{5}\right)^{7-x} \quad \text{for } x=0, 1, 2, \dots, 7.\]</div><div class="why"><div>Substitute \(n=7\), \(p=3/5\), and \(1-p = 2/5\) into the binomial probability function.</div></div></li>
+            <li><div class="w">\[\text{(b)(i)}\quad P(\text{Exactly 3 rainy days}) = P(X=3) = C_3^7 \left(\frac{3}{5}\right)^3 \left(\frac{2}{5}\right)^4 = \underline{0.1935} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Substitute \(x=3\) directly.</div></div></li>
+            <li><div class="w">\[\text{(ii)}\quad P(\text{Less than 2 rainy days}) = P(X < 2) = P(X=0) + P(X=1)\]\[= \left(\frac{2}{5}\right)^7 + C_1^7\left(\frac{3}{5}\right)\left(\frac{2}{5}\right)^6 = \underline{0.0188} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>"Less than 2" means strictly less than 2, so \(x=0\) and \(x=1\).</div></div></li>
+            <li><div class="w">\[\text{(iii)}\quad P(\text{At most 5 rainy days}) = P(X \le 5) = 1 - P(X=6) - P(X=7)\]\[= 1 - C_6^7\left(\frac{3}{5}\right)^6\left(\frac{2}{5}\right) - \left(\frac{3}{5}\right)^7 = \underline{0.8414} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Evaluating two complement terms is much faster than summing six terms (\(x=0\) to \(5\)).</div></div></li>
+            <li><div class="w">\[\text{(c)}\quad \text{Mean of the number of rainy days } = E(X) = 7\left(\frac{3}{5}\right) = \underline{\frac{21}{5}}\]\[\text{Variance of the number of rainy days } = \operatorname{Var}(X) = 7\left(\frac{3}{5}\right)\left(\frac{2}{5}\right) = \underline{\frac{42}{25}}\]</div><div class="why"><div>Apply \(E(X) = np\) and \(\operatorname{Var}(X) = np(1-p)\). Keep exact fractions.</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.6 -->
+  <div class="page" data-key="ex106" data-label="Example 10.6" data-ex="1">
+    <div class="player" data-viz="ex106">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.6</span><h3>Problem involving a binomial distribution</h3></div>
+        <p>There are 5 multiple choice questions in a test. Each question has four options and only one of them is correct. A correct answer scores 2 marks and incorrect answers score 0 marks. The pass mark for the test is at 6 marks. A candidate answers each question independently and randomly. Let \(X\) be the number of questions correctly answered by the candidate.</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Find the probability that the candidate passes the test.</span></li>
+          <li><b>(b)</b><span>Find the probability that the candidate scores full marks given that he/she passes the test.<br>(Give your answers correct to 4 decimal places.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex106"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>There are 5 identical and independent Bernoulli trials (i.e. the 5 questions in the test). \(X\) is the number of successes (i.e. questions answered correctly) in these 5 trials.</p><p>\(\therefore X\) follows a binomial distribution. \(X \sim B\left(5, \frac{1}{4}\right)\)</p></div><div class="why"><div>Translate the problem into a Binomial model with \(n=5\) and \(p=1/4\).</div></div></li>
+            <li><div class="w"><p>Moreover, in order to get 6 marks or above, at least 3 questions should be answered correctly.</p></div><div class="why"><div>Translate the mark scheme into the count of successful trials (\(2X \ge 6 \implies X \ge 3\)).</div></div></li>
+            <li><div class="w">\[\text{(a)}\quad \text{Required probability } = P(X \ge 3) = P(X=3) + P(X=4) + P(X=5)\]\[= C_3^5\left(\frac{1}{4}\right)^3\left(\frac{3}{4}\right)^2 + C_4^5\left(\frac{1}{4}\right)^4\left(\frac{3}{4}\right) + \left(\frac{1}{4}\right)^5 = \underline{0.1035} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Sum the mutually exclusive events \(X=3, 4, 5\).</div></div></li>
+            <li><div class="w">\[\text{(b)}\quad \text{Required probability } = P(X=5 \mid X \ge 3) = \frac{P(X=5)}{P(X \ge 3)}\]</div><div class="why"><div>Full marks are obtained when \(X=5\). Since \(X=5\) is a subset of \(X \ge 3\), the intersection \(P(X=5 \cap X \ge 3) = P(X=5)\).</div></div></li>
+            <li><div class="w">\[\approx \frac{(1/4)^5}{0.103516} = \underline{0.0094} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Use the unrounded value of \(P(X \ge 3)\) from part (a) to avoid rounding errors.</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.7 -->
+  <div class="page" data-key="ex107" data-label="Example 10.7" data-ex="1">
+    <div class="player" data-viz="ex107">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.7</span><h3>Problem involving binomial distributions</h3></div>
+        <p>A factory manufactures a specific kind of product in large quantities, and each item of the product has a probability of 0.05 to be defective. A sample of 3 items are selected randomly. If no items in the sample are defective, the production quality is satisfactory. If exactly 1 item in the sample is defective, a re-sampling will be carried out. Otherwise, the production quality is poor.</p>
+        <p>In the re-sampling, 4 items from the production line are selected randomly. The production quality is satisfactory if at most 1 item in the second sample is defective. Otherwise, the production quality is poor.</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Find the probability that only one sample is selected and the production quality is satisfactory.</span></li>
+          <li><b>(b)</b><span>Find the probability that a re-sampling is needed.</span></li>
+          <li><b>(c)</b><span>Find the probability that the production quality is satisfactory.<br>(Give your answers correct to 4 decimal places.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz">
+          <svg viewBox="0 0 380 230" id="svg-ex107">
+            <!-- Stage Headers -->
+            <text x="65" y="18" class="lbl-s" text-anchor="middle" font-weight="600">1st sample (n=3)</text>
+            <text x="185" y="18" class="lbl-s" text-anchor="middle" font-weight="600">Re-sampling (n=4)</text>
+            <text x="325" y="18" class="lbl-s" text-anchor="middle" font-weight="600">Final Result</text>
+
+            <circle cx="12" cy="115" r="3.5" fill="var(--ink-3)"/>
+
+            <!-- Branch 1: Top (No defective -> Satisfactory) -->
+            <path d="M 12 115 L 68 45" class="tree-branch b1"/>
+            <text x="36" y="72" class="lbl-s tree-lbl b1" text-anchor="middle">P(X₁=0)</text>
+            <text x="76" y="49" class="lbl-s tree-lbl b1">No defective</text>
+            <path d="M 152 45 L 268 45" class="tree-branch b1"/>
+            <text x="278" y="49" class="lbl-s tree-lbl b1" font-weight="600" fill="var(--teal)">Satisfactory</text>
+
+            <!-- Branch 2: Middle (Exactly 1 defective -> Re-sampling) -->
+            <path d="M 12 115 L 68 115" class="tree-branch b2"/>
+            <text x="36" y="108" class="lbl-s tree-lbl b2" text-anchor="middle">P(X₁=1)</text>
+            <text x="76" y="119" class="lbl-s tree-lbl b2">1 defective</text>
+            <circle cx="148" cy="115" r="3" fill="var(--ink-3)"/>
+
+            <!-- Branch 2a: Re-sample <= 1 -> Satisfactory -->
+            <path d="M 148 115 L 186 85" class="tree-branch b2a"/>
+            <text x="162" y="93" class="lbl-s tree-lbl b2a" text-anchor="middle">P(X₂≤1)</text>
+            <text x="194" y="89" class="lbl-s tree-lbl b2a">≤ 1 defective</text>
+            <path d="M 262 85 L 268 85" class="tree-branch b2a"/>
+            <text x="278" y="89" class="lbl-s tree-lbl b2a" font-weight="600" fill="var(--teal)">Satisfactory</text>
+
+            <!-- Branch 2b: Re-sample >= 2 -> Poor -->
+            <path d="M 148 115 L 186 145" class="tree-branch b2b"/>
+            <text x="162" y="142" class="lbl-s tree-lbl b2b" text-anchor="middle">P(X₂≥2)</text>
+            <text x="194" y="149" class="lbl-s tree-lbl b2b">≥ 2 defective</text>
+            <path d="M 262 145 L 268 145" class="tree-branch b2b"/>
+            <text x="278" y="149" class="lbl-s tree-lbl b2b" font-weight="600" fill="var(--red)">Poor</text>
+
+            <!-- Branch 3: Bottom (>= 2 defective -> Poor) -->
+            <path d="M 12 115 L 68 185" class="tree-branch b3"/>
+            <text x="36" y="160" class="lbl-s tree-lbl b3" text-anchor="middle">P(X₁≥2)</text>
+            <text x="76" y="189" class="lbl-s tree-lbl b3">≥ 2 defective</text>
+            <path d="M 152 185 L 268 185" class="tree-branch b3"/>
+            <text x="278" y="189" class="lbl-s tree-lbl b3" font-weight="600" fill="var(--red)">Poor</text>
+          </svg>
+        </div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>Let \(X_1\) be the number of defective items in the first sample and \(X_2\) be the number of defective items in the second sample, then</p>\[X_1 \sim B(3, 0.05) \quad \text{and} \quad X_2 \sim B(4, 0.05)\]</div><div class="why"><div>Define the two independent binomial distributions.</div></div></li>
+            <li><div class="w">\[\text{(a)}\quad \text{Required probability } = P(X_1=0) = (0.95)^3 = \underline{0.8574} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>First stage passes immediately if all 3 items are good (top branch).</div></div></li>
+            <li><div class="w">\[\text{(b)}\quad \text{Required probability } = P(X_1=1) = C_1^3(0.05)(0.95)^2 = \underline{0.1354} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Resampling trigger condition (middle branch).</div></div></li>
+            <li><div class="w"><p>(c) Required probability</p>\[= P(\text{The result of the first sample is satisfactory})\]\[+ P(\text{Re-sampling is needed and the result of the second sample is satisfactory})\]</div><div class="why"><div>Apply the Law of Total Probability for the two pathways to a satisfactory result.</div></div></li>
+            <li><div class="w">\[= P(X_1=0) + P(X_1=1) \times P(X_2 \le 1)\]</div><div class="why"><div>The result of the 1st sample is independent of the result of the 2nd sample.</div></div></li>
+            <li><div class="w">\[= (0.95)^3 + C_1^3(0.05)(0.95)^2 \times [(0.95)^4 + C_1^4(0.05)(0.95)^3]\]\[= \underline{0.9909} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Carry full precision in intermediate steps to maintain accuracy.</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.8 -->
+  <div class="page" data-key="ex108" data-label="Example 10.8" data-ex="1">
+    <div class="player" data-viz="ex108">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.8</span><h3>Problem involving binomial distributions</h3></div>
+        <p>In each of the 5 working days of a week, Ryan has a probability of 0.25 to be stuck in a traffic jam. A week is said to be a poor traffic week to him if he is stuck in a traffic jam for more than 3 working days in the week. Assume that being stuck in traffic jams is independent among the working days.</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>(i) Find the probability that a particular week is a poor traffic week to Ryan.<br>(ii) Find the expected number of working days that Ryan is stuck in a traffic jam in a week.<br>(iii) Find the expected number of working days that Ryan is stuck in a traffic jam in 5 weeks.</span></li>
+          <li><b>(b)</b><span>A month is said to be an unpleasant month to Ryan if there are at least 2 poor traffic weeks in that month. Assume that there are 4 weeks in next month.<br>(i) Find the probability that next month will be an unpleasant month to Ryan.<br>(ii) Find the expected number of poor traffic weeks to Ryan in next month.<br>(Give your answers correct to 4 decimal places if necessary.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex108"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>(a) Let \(X\) be the number of working days in a week that Ryan is stuck in a traffic jam, then \(X \sim B(5, 0.25)\).</p></div><div class="why"><div>Establish the base binomial distribution for a single week.</div></div></li>
+            <li><div class="w">\[\text{(i)}\quad P(\text{A poor traffic week}) = P(X > 3) = P(X=4) + P(X=5)\]\[= C_4^5 (0.25)^4(0.75) + (0.25)^5 = \underline{0.0156} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>"More than 3" means 4 or 5.</div></div></li>
+            <li><div class="w">\[\text{(ii)}\quad \text{Expected number of working days... in a week} = E(X) = 5(0.25) = \underline{1.25}\]</div><div class="why"><div>Apply \(E(X) = np\).</div></div></li>
+            <li><div class="w"><p>(iii) Number of working days in 5 weeks = \(5 \times 5 = 25\).</p>\[\text{Expected number of working days in 5 weeks...} = 25(0.25) = \underline{6.25}\]</div><div class="why"><div>Expectation scales linearly.</div></div></li>
+            <li><div class="w"><p>(b) Let \(Y\) be the number of poor traffic weeks in next month, then \(Y \sim B(4, p)\), where \(p = P(X > 3) = 0.015625\).</p></div><div class="why"><div>A new Binomial variable where the trial outcome is whether a week was poor.</div></div></li>
+            <li><div class="w">\[\text{(i)}\quad P(\text{An unpleasant month}) = P(Y \ge 2) = P(Y=2) + P(Y=3) + P(Y=4)\]\[= C_2^4(0.015625)^2(0.984375)^2 + C_3^4(0.015625)^3(0.984375) + (0.015625)^4 = \underline{0.0014} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Apply the Binomial formula to the new variable \(Y\). Use the exact value of \(p\).</div></div></li>
+            <li><div class="w">\[\text{(ii)}\quad \text{Expected number of poor traffic weeks in next month} = E(Y) = 4(0.015625) = \underline{0.0625}\]</div><div class="why"><div>Apply \(E(Y) = np\) for the month.</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.9 -->
+  <div class="page" data-key="ex109" data-label="Example 10.9" data-ex="1">
+    <div class="player" data-viz="ex109">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.9</span><h3>Problem involving a binomial distribution</h3></div>
+        <p>In each throw of an unfair dice, the probability of obtaining a '6' is 1/9. Suppose James throws the dice \(n\) times.</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Find the least value of \(n\) such that the probability of obtaining at least one '6' is greater than 0.9.</span></li>
+          <li><b>(b)</b><span>For the value of \(n\) obtained in (a), find the probability of obtaining at most two '6's. (Give your answer correct to 4 decimal places.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex109"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>(a) Let \(X\) be the number of '6's obtained, then \(X \sim B(n, 1/9)\).</p>\[P(X \ge 1) > 0.9 \implies 1 - P(X=0) > 0.9\]</div><div class="why"><div>Set up the inequality based on the question. "At least one" is the complement of "none".</div></div></li>
+            <li><div class="w">\[1 - \left(\frac{8}{9}\right)^n > 0.9 \implies \left(\frac{8}{9}\right)^n < 0.1\]</div><div class="why"><div>Substitute \(P(X=0)\). Then isolate the term with \(n\).</div></div></li>
+            <li><div class="w">\[n \log\left(\frac{8}{9}\right) < \log 0.1\]</div><div class="why"><div>Take the logarithm of both sides. Bring down the exponent \(n\).</div></div></li>
+            <li><div class="w">\[n > \frac{\log 0.1}{\log(8/9)}\]\[n > 19.55 \text{ (cor. to 2 d.p.)}\]</div><div class="why"><div>Since \(\log(8/9) < 0\), the inequality sign <strong>must flip</strong> when you divide by it.</div></div></li>
+            <li><div class="w"><p>The least value of \(n\) is <u>20</u>.</p></div><div class="why"><div>Since \(n\) must be an integer, take the next whole number above 19.55.</div></div></li>
+            <li><div class="w"><p>(b) Required probability = \(P(X \le 2)\)</p>\[= P(X=0) + P(X=1) + P(X=2)\]</div><div class="why"><div>Using \(X \sim B(20, 1/9)\).</div></div></li>
+            <li><div class="w">\[= \left(\frac{8}{9}\right)^{20} + C_1^{20}\left(\frac{1}{9}\right)\left(\frac{8}{9}\right)^{19} + C_2^{20}\left(\frac{1}{9}\right)^2\left(\frac{8}{9}\right)^{18} = \underline{0.6134} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Sum terms for \(x=0, 1, 2\).</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.10 -->
+  <div class="page" data-key="ex1010" data-label="Example 10.10" data-ex="1">
+    <div class="player" data-viz="ex1010">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.10</span><h3>Problem involving a binomial distribution</h3></div>
+        <p>7% of the items manufactured by a production line are defective. The quality manager draws a number of items randomly from the production line and inspects them one by one.</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Find the probability that exactly 3 defective items are found among the first 11 items inspected.</span></li>
+          <li><b>(b)</b><span>Find the probability that the 12th item inspected is the 4th defective item.<br>(Give your answers correct to 4 decimal places.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex1010"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>(a) Let \(X\) be the number of defective items found out of 11 items inspected, then \(X \sim B(11, 0.07)\).</p></div><div class="why"><div>Define the binomial distribution for the first 11 items.</div></div></li>
+            <li><div class="w">\[\text{Required probability } = P(X=3) = C_3^{11} (0.07)^3 (0.93)^8 = \underline{0.0317} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Standard binomial probability.</div></div></li>
+            <li><div class="w"><p>(b) Getting exactly 3 defective items in the 1st to 11th items, AND the 12th item is the 4th defective item.</p></div><div class="why"><div>Event decomposition based on the sequence of inspections.</div></div></li>
+            <li><div class="w">\[\text{Required probability } = P(X=3) \times 0.07 \approx 0.031670 \times 0.07 = \underline{0.0022} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Multiply the probability from (a) by the independent probability of the 12th item being defective.</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.11 -->
+  <div class="page" data-key="ex1011" data-label="Example 10.11" data-ex="1">
+    <div class="player" data-viz="ex1011">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.11</span><h3>Problem involving a binomial distribution</h3></div>
+        <p>The probability of having a sunny day is 0.65. It is known that the weather in any particular day is independent of the weather in the other days. Assume that Monday is the first day of a week.</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Find the probability that there are exactly 5 sunny days and the 4th one appears after Friday in a certain week.</span></li>
+          <li><b>(b)</b><span>Given that there are at least 5 sunny days in a certain week, find the probability that the 4th sunny day appears after Friday in that week.<br>(Give your answers correct to 4 decimal places.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex1011"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>(a) Exactly 3 sunny days from Mon to Fri, AND the 4th sunny day is on Sat, and 5th on Sun.</p><p>Let \(X\) be the number of sunny days among the first five days in a week, then \(X \sim B(5, 0.65)\).</p></div><div class="why"><div>If the 4th sunny day is after Friday, exactly 3 sunny days occur Mon–Fri, and both Sat and Sun must be sunny.</div></div></li>
+            <li><div class="w">\[\text{Required probability } = P(X=3) \times (0.65)^2 = C_3^5 (0.65)^3(0.35)^2 \times (0.65)^2 = \underline{0.1421} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Multiply the binomial probability for the 5 weekdays by the probability of 2 sunny weekend days.</div></div></li>
+            <li><div class="w"><p>(b) Let \(W\) be the number of sunny days in a week, then \(W \sim B(7, 0.65)\).</p>\[P(\text{At least 5 sunny days in a week}) = P(W \ge 5) = P(W=5) + P(W=6) + P(W=7)\]</div><div class="why"><div>Define the distribution for the full week to find the denominator for the conditional probability.</div></div></li>
+            <li><div class="w">\[= C_5^7(0.65)^5(0.35)^2 + C_6^7(0.65)^6(0.35) + (0.65)^7 = 0.532283 \text{ (cor. to 6 d.p.)}\]</div><div class="why"><div>Calculate the total probability of the given condition.</div></div></li>
+            <li><div class="w">\[\text{Required probability } = \frac{P(X=3) \times (0.65)^2}{P(W \ge 5)}\]</div><div class="why"><div>Apply conditional formula \(P(A \mid B) = P(A \cap B)/P(B)\). The intersection is exactly the event from part (a).</div></div></li>
+            <li><div class="w">\[\approx \frac{0.142136}{0.532283} = \underline{0.2670} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Use unrounded values for the final division.</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" data-key="check" data-label="Check"><div class="check" data-sec="binomial"></div></div>
+</section>
+
+<!-- ===================== POISSON ===================== -->
+<section class="view" id="v-pois" data-title="Poisson Distribution Po(λ)" hidden>
+  <div class="head"><p class="eyebrow">Section 10.2</p><h1>Poisson Distribution <i>Po</i>(&lambda;)</h1></div>
+
+  <div class="page" data-key="idea" data-label="Concepts">
+    <p>Models the number of random, independent events in a continuous interval of time or region of space:</p>
+    <div class="defn">
+      <span class="lbl">Poisson Probability Function</span>
+      \[P(X=x) = \frac{e^{-\lambda} \lambda^x}{x!} \quad \text{for } x = 0, 1, 2, \dots\]
+      <hr style="border:0;border-top:1px solid var(--line);margin:8px 0">
+      <p><strong>Mean and Variance:</strong></p>
+      \[\mu = E(X) = \lambda \qquad\text{and}\qquad \sigma^2 = \operatorname{Var}(X) = \lambda\]
+      <p>Notice that for a Poisson distribution, <strong>variance always equals the mean</strong>.</p>
+    </div>
+
+    <!-- The 3 Poisson Assumptions Illustrated with Petrol Station -->
+    <div class="lab">
+      <div class="lab-h"><span class="tag teal">Experiment Preview</span><h3>The 3 Poisson Assumptions (Petrol Station Example)</h3></div>
+      <p class="small muted">Cars arrive at a petrol station at an average of \(\lambda = 3\) cars per minute. A random variable \(X\) is Poisson if and only if all three assumptions hold:</p>
+      
+      <div class="svgwrap">
+        <svg viewBox="0 0 500 130" id="svgPetrolStation">
+          <line class="axis" x1="30" x2="470" y1="60" y2="60"/>
+          <text x="30" y="80" class="lbl-s">0s</text>
+          <text x="250" y="80" class="lbl-s" text-anchor="middle">30s</text>
+          <text x="470" y="80" class="lbl-s" text-anchor="end">60s (1 min)</text>
+          
+          <!-- Sample car arrival points -->
+          <circle cx="110" cy="60" r="6" fill="var(--violet)"/>
+          <text x="110" y="45" class="lbl-s" text-anchor="middle">🚗 Car 1</text>
+          
+          <circle cx="280" cy="60" r="6" fill="var(--violet)"/>
+          <text x="280" y="45" class="lbl-s" text-anchor="middle">🚗 Car 2</text>
+          
+          <circle cx="390" cy="60" r="6" fill="var(--violet)"/>
+          <text x="390" y="45" class="lbl-s" text-anchor="middle">🚗 Car 3</text>
+          
+          <text x="250" y="115" class="lbl-s" text-anchor="middle" fill="var(--teal)">Average Rate: λ = 3 cars / minute</text>
+        </svg>
+      </div>
+
+      <div class="grid2">
+        <div class="guide-card">
+          <h4>(a) Singularity (At an instant)</h4>
+          <p>At most one event can occur at any instantaneous point in time.</p>
+        </div>
+        <div class="guide-card">
+          <h4>(b) Independence</h4>
+          <p>Arrivals in any two non-overlapping intervals are completely independent.</p>
+        </div>
+      </div>
+      <div class="guide-card">
+        <h4>(c) Proportionality</h4>
+        <p>In any time interval, the expected occurrences are strictly proportional to the length of the interval (e.g., 3 cars in 1 min \(\implies\) 6 cars in 2 mins).</p>
+      </div>
+    </div>
+
+    <!-- Derivation & Proof that Sum P = 1 -->
+    <details class="note tip"><summary><span class="lb">Derivation</span> Proof that all Poisson Probabilities sum to 1</summary><div class="body">
+      <p>Using the Taylor expansion of \(e^\lambda = \sum_{x=0}^\infty \frac{\lambda^x}{x!} = 1 + \lambda + \frac{\lambda^2}{2!} + \dots\):</p>
+      \[\sum_{x=0}^\infty P(X=x) = \sum_{x=0}^\infty \frac{e^{-\lambda}\lambda^x}{x!} = e^{-\lambda} \sum_{x=0}^\infty \frac{\lambda^x}{x!} = e^{-\lambda} \cdot e^\lambda = e^0 = 1\]
+      <p>This confirms that \(P(X=x)\) satisfies both conditions for a valid discrete probability distribution!</p>
+    </div></details>
+  </div>
+
+  <!-- Example 10.12 -->
+  <div class="page" data-key="ex1012" data-label="Example 10.12" data-ex="1">
+    <div class="player" data-viz="ex1012">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.12</span><h3>Find probabilities, E(X) and Var(X) from a given Poisson distribution</h3></div>
+        <p>It is given that a random variable \(X \sim Po(4.5)\). Find</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>\(P(X = 7)\),</span></li>
+          <li><b>(b)</b><span>\(P(X < 2)\),</span></li>
+          <li><b>(c)</b><span>\(E(X)\) and \(\operatorname{Var}(X)\)<br>(Give your answers correct to 4 decimal places if necessary.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex1012"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>\(X \sim Po(4.5) \implies P(X=x) = \frac{e^{-4.5}(4.5)^x}{x!}\) for \(x = 0, 1, 2, \dots\)</p></div><div class="why"><div>Identify the probability function with \(\lambda = 4.5\).</div></div></li>
+            <li><div class="w">\[\text{(a)}\quad P(X=7) = \frac{e^{-4.5}(4.5)^7}{7!} = \underline{0.0824} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Substitute \(x = 7\) into the Poisson formula.</div></div></li>
+            <li><div class="w">\[\text{(b)}\quad P(X < 2) = P(X=0) + P(X=1) = \frac{e^{-4.5}(4.5)^0}{0!} + \frac{e^{-4.5}(4.5)^1}{1!} = \underline{0.0611} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Strict inequality \(< 2\) includes only \(x=0\) and \(x=1\). Note that \(0! = 1\).</div></div></li>
+            <li><div class="w">\[\text{(c)}\quad E(X) = \lambda = \underline{4.5}\]\[\operatorname{Var}(X) = \lambda = \underline{4.5}\]</div><div class="why"><div>In a Poisson distribution, both mean and variance equal the parameter \(\lambda\).</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.13 -->
+  <div class="page" data-key="ex1013" data-label="Example 10.13" data-ex="1">
+    <div class="player" data-viz="ex1013">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.13</span><h3>Problem involving Poisson distributions</h3></div>
+        <p>The number of telephone calls coming into an inquiry hotline in a minute follows a Poisson distribution with a mean of 0.2.</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Find the probabilities that, in the next minute,<br>(i) no calls come into the hotline,<br>(ii) exactly 2 calls come into the hotline.</span></li>
+          <li><b>(b)</b><span>Find the probabilities that, in a 15-minute interval,<br>(i) exactly 1 call comes into the hotline,<br>(ii) at least 6 calls come into the hotline.<br>(Give your answers correct to 4 decimal places.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex1013"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>(a) Let \(X\) be the number of calls coming into the hotline in the next minute, then \(X \sim Po(0.2)\).</p></div><div class="why"><div>Identify the random variable and its parameter \(\lambda\) for a 1-minute interval.</div></div></li>
+            <li><div class="w">\[\text{(i)}\quad \text{Required probability } = P(X=0) = e^{-0.2} = \underline{0.8187} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Base 1-minute rate calculation.</div></div></li>
+            <li><div class="w">\[\text{(ii)}\quad \text{Required probability } = P(X=2) = \frac{e^{-0.2}(0.2)^2}{2!} = \underline{0.0164} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Substitute \(x = 2\) into the formula.</div></div></li>
+            <li><div class="w"><p>(b) Mean number of calls coming into the hotline in 15 minutes \(= 0.2 \times 15 = 3\).</p><p>Let \(Y\) be the number of calls coming into the hotline in 15 minutes, then \(Y \sim Po(3)\).</p></div><div class="why"><div>The average number of occurrences is proportional to the size of the interval. Scale \(\lambda\) up by 15.</div></div></li>
+            <li><div class="w">\[\text{(i)}\quad \text{Required probability } = P(Y=1) = \frac{e^{-3}3^1}{1!} = \underline{0.1494} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Use the new parameter \(\lambda = 3\) and substitute \(y = 1\).</div></div></li>
+            <li><div class="w">\[\text{(ii)}\quad \text{Required probability } = P(Y \ge 6) = 1 - P(Y=0) - P(Y=1) - P(Y=2) - P(Y=3) - P(Y=4) - P(Y=5)\]</div><div class="why"><div>Complement rule prevents summing an infinite series.</div></div></li>
+            <li><div class="w">\[= 1 - e^{-3} - \frac{e^{-3}3^1}{1!} - \frac{e^{-3}3^2}{2!} - \frac{e^{-3}3^3}{3!} - \frac{e^{-3}3^4}{4!} - \frac{e^{-3}3^5}{5!} = \underline{0.0839} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Calculate the sum of probabilities for 0 to 5 calls and subtract from 1.</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.14 -->
+  <div class="page" data-key="ex1014" data-label="Example 10.14" data-ex="1">
+    <div class="player" data-viz="ex1014">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.14</span><h3>Problem involving Poisson distributions</h3></div>
+        <p>Two new albums K and T are available on a music website for members to download. On average, there are 5 downloads of album K and 4 downloads of album T in a day. The number of downloads of each album in a day follows a Poisson distribution and is independent of another album.</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>Find the probability that there are exactly 2 downloads of album K and exactly 3 downloads of album T in a certain day.</span></li>
+          <li><b>(b)</b><span>Find the probability that there are a total of 3 downloads of these two albums in a certain day.</span></li>
+          <li><b>(c)</b><span>Find the expected total number of downloads of these two albums in a certain day.<br>(Give your answers correct to 4 decimal places if necessary.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex1014"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>(a) Let \(X\) and \(Y\) be the numbers of downloads of albums K and T respectively in a day, then \(X \sim Po(5)\) and \(Y \sim Po(4)\).</p></div><div class="why"><div>Define the two independent Poisson distributions.</div></div></li>
+            <li><div class="w">\[\text{Required probability } = P(X=2 \text{ and } Y=3) = P(X=2) \times P(Y=3)\]\[= \frac{e^{-5}5^2}{2!} \times \frac{e^{-4}4^3}{3!} = \underline{0.0165} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>\(X\) and \(Y\) are independent, so multiply their probabilities.</div></div></li>
+            <li><div class="w"><p>(b) Required probability</p>\[= P(X=3) \times P(Y=0) + P(X=2) \times P(Y=1) + P(X=1) \times P(Y=2) + P(X=0) \times P(Y=3)\]</div><div class="why"><div>Add probabilities of all disjoint combinations where \(X+Y=3\).</div></div></li>
+            <li><div class="w">\[= \frac{e^{-5}5^3}{3!} \times e^{-4} + \frac{e^{-5}5^2}{2!} \times \frac{e^{-4}4^1}{1!} + \frac{e^{-5}5^1}{1!} \times \frac{e^{-4}4^2}{2!} + e^{-5} \times \frac{e^{-4}4^3}{3!}\]\[= \underline{0.0150} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Evaluate each product and sum them.</div></div></li>
+            <li><div class="w">\[\text{(c)}\quad \text{Expected total number of downloads...} = E(X) + E(Y) = 5 + 4 = \underline{9}\]</div><div class="why"><div>Expectation is always additive: \(E(X+Y) = E(X) + E(Y)\).</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" data-key="check" data-label="Check"><div class="check" data-sec="poisson"></div></div>
+</section>
+
+<!-- ===================== CHOOSING & MIXED ===================== -->
+<section class="view" id="v-mixed" data-title="Choosing & Mixed Models" hidden>
+  <div class="head"><p class="eyebrow">Section 10.3</p><h1>Choosing an Appropriate Distribution</h1></div>
+
+  <div class="page" data-key="matrix" data-label="Decision Matrix">
+    <p>The following table summarizes the characteristics and concepts in different discrete probability distributions we have covered before.</p>
+    <div class="dtwrap"><table class="dt">
+      <tr><th>Random variable \(X\)</th><th>Parameter(s)</th><th>Probability function of \(X\)</th><th>\(E(X)\)</th><th>\(\operatorname{Var}(X)\)</th></tr>
+      <tr><td style="text-align:left"><strong>Bernoulli variable:</strong><br>It takes 1 for a 'success' and 0 for a 'failure' in a trial</td><td>\(p\): the probability of success in a trial</td><td>\(P(X=x) = p^x(1-p)^{1-x}\) for \(x=0, 1\)</td><td>\(p\)</td><td>\(p(1-p)\)</td></tr>
+      <tr><td style="text-align:left"><strong>Binomial variable:</strong><br>Number of successes in \(n\) identical and independent Bernoulli trials</td><td>\(p\): the probability of success in each trial<br>\(n\): the total number of trials</td><td>\(P(X=x) = C_x^n p^x(1-p)^{n-x}\) for \(x=0, 1, 2, \dots, n\)</td><td>\(np\)</td><td>\(np(1-p)\)</td></tr>
+      <tr><td style="text-align:left"><strong>Poisson variable:</strong><br>Number of occurrences of an event in an interval of time or a region of space</td><td>\(\lambda\): the average number of occurrences of the event in a specified interval of time or region of space</td><td>\(P(X=x) = \frac{e^{-\lambda}\lambda^x}{x!}\) for \(x=0, 1, 2, \dots\)</td><td>\(\lambda\)</td><td>\(\lambda\)</td></tr>
+    </table></div>
+  </div>
+
+  <!-- Example 10.15 -->
+  <div class="page" data-key="ex1015" data-label="Example 10.15" data-ex="1">
+    <div class="player" data-viz="ex1015">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.15</span><h3>Find probabilities involving more than one discrete probability distribution</h3></div>
+        <p>There are 5.2 calls received by Jay each day on average, and the number of calls received per day follows a Poisson distribution. It is found that 60% of the calls are marketing calls and the occurrences of the marketing calls are independent of each other. Find the probabilities that, in a particular day,</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>more than 3 calls are received by Jay,</span></li>
+          <li><b>(b)</b><span>exactly 6 calls are received by Jay and exactly 5 of them are marketing calls,</span></li>
+          <li><b>(c)</b><span>fewer than 4 calls are received by Jay and at least 1 of them is a marketing call.<br>(Give your answers correct to 4 decimal places.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex1015"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>(a) Let \(X\) be the number of calls received by Jay in a day, then \(X \sim Po(5.2)\).</p>\[\text{Required probability } = P(X > 3) = 1 - e^{-5.2} - \frac{e^{-5.2}(5.2)^1}{1!} - \frac{e^{-5.2}(5.2)^2}{2!} - \frac{e^{-5.2}(5.2)^3}{3!}\]\[= \underline{0.7619} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Standard Poisson complement calculation.</div></div></li>
+            <li><div class="w"><p>(b) Let \(Y\) be the number of marketing calls received out of 6 calls, then \(Y \sim B(6, 0.6)\).</p>\[\text{Required probability } = P(X=6 \text{ and } Y=5) = P(X=6) \times P(Y=5)\]</div><div class="why"><div>Layer a Binomial trial on top of a Poisson volume.</div></div></li>
+            <li><div class="w">\[= \frac{e^{-5.2}(5.2)^6}{6!} \times C_5^6(0.6)^5(0.4) = \underline{0.0283} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Calculate the product of the two probabilities.</div></div></li>
+            <li><div class="w"><p>(c) If no calls are received by Jay, it is impossible for him to receive at least 1 marketing call. Thus, \(P(X=0 \text{ and at least 1 marketing call}) = 0\).</p><p>Let \(W_i\) be the number of marketing calls received out of \(i\) calls where \(i > 0\), then \(W_i \sim B(i, 0.6)\).</p></div><div class="why"><div>Condition on total calls \(X \in \{1, 2, 3\}\).</div></div></li>
+            <li><div class="w"><p>Required probability</p>\[= P(X=1) \times P(W_1 \ge 1) + P(X=2) \times P(W_2 \ge 1) + P(X=3) \times P(W_3 \ge 1)\]</div><div class="why"><div>Sum the probabilities of these mutually exclusive pathways. Note \(P(W_1 \ge 1) = P(W_1 = 1) = 0.6\) and \(P(W_3 \ge 1) = 1 - P(W_3 = 0) = 1 - (0.4)^3\).</div></div></li>
+            <li><div class="w">\[= \frac{e^{-5.2}(5.2)^1}{1!} \times 0.6 + \frac{e^{-5.2}(5.2)^2}{2!} \times [C_1^2(0.6)(0.4) + (0.6)^2] + \frac{e^{-5.2}(5.2)^3}{3!} \times [1-(0.4)^3]\]\[= \underline{0.2009} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Calculate and sum the terms.</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example 10.16 -->
+  <div class="page" data-key="ex1016" data-label="Example 10.16" data-ex="1">
+    <div class="player" data-viz="ex1016">
+      <div class="pq">
+        <div class="qh"><span class="tag amber">Example 10.16</span><h3>Find probabilities involving more than one discrete probability distribution</h3></div>
+        <p>The number of road accidents occurring at a junction follows a Poisson distribution and road accidents occur with a mean rate of 2 per week.</p>
+        <ol class="parts">
+          <li><b>(a)</b><span>What is the probability that no road accidents occur at the junction in a particular week?</span></li>
+          <li><b>(b)</b><span>What is the probability that, in 5 consecutive weeks, there are exactly 3 weeks with no road accidents occurred at the junction?</span></li>
+          <li><b>(c)</b><span>In 5 consecutive weeks, what is the expected number of weeks with no road accidents occurred at the junction?</span></li>
+          <li><b>(d)</b><span>What is the probability that, in 6 consecutive weeks, the last week is the third one with no road accidents occurred at the junction?</span></li>
+          <li><b>(e)</b><span>What is the probability that, in 5 consecutive weeks, there are exactly 2 weeks with no road accidents occurred at the junction and a total of 6 road accidents occur in these 5 weeks?<br>(Give your answers correct to 4 decimal places.)</span></li>
+        </ol>
+      </div>
+      <div class="pmain">
+        <div class="pviz"><svg viewBox="0 0 320 200" id="svg-ex1016"></svg></div>
+        <div>
+          <p class="pempty">Try it on paper first, then press Start ▶</p>
+          <ol class="pwork">
+            <li><div class="w"><p>(a) Let \(X\) be the number of road accidents occurring in a week, then \(X \sim Po(2)\).</p>\[\text{Required probability } = P(X=0) = e^{-2} = \underline{0.1353} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Weekly base rate calculation.</div></div></li>
+            <li><div class="w"><p>(b) Let \(Y\) be the number of weeks with no road accidents out of 5 weeks, then \(Y \sim B(5, e^{-2})\).</p>\[\text{Required probability } = P(Y=3) = C_3^5 (e^{-2})^3 (1-e^{-2})^2 = \underline{0.0185} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Treating each week as an independent trial, creating a binomial distribution. \(P(\text{No road accidents occurring in a week}) = P(X=0) = e^{-2}\).</div></div></li>
+            <li><div class="w"><p>(c) Expected number of weeks with no road accidents out of 5 weeks</p>\[= E(Y) = 5(e^{-2}) = \underline{0.6767} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Use the expected value formula for the binomial distribution \(Y\).</div></div></li>
+            <li><div class="w"><p>(d) Required probability \(= P(Y=2) \times e^{-2}\)</p>\[= C_2^5 (e^{-2})^2 (1-e^{-2})^3 \times e^{-2} = \underline{0.0160} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>The 6th week must be accident-free, preceded by exactly 2 in the first 5.</div></div></li>
+            <li><div class="w"><p>(e) Possible number of road accidents per week (out of the 3 weeks with accidents):</p>
+              <p>Combination 1: 0, 0, 1, 1, 4 (Number of ways \(= C_2^5 C_2^3\))</p>
+              <p>Combination 2: 0, 0, 1, 2, 3 (Number of ways \(= C_2^5 C_1^3 C_1^2 = P_3^5\))</p>
+              <p>Combination 3: 0, 0, 2, 2, 2 (Number of ways \(= C_2^5\))</p>
+            </div><div class="why"><div>Partition 6 accidents into the 3 non-zero weeks. Note \(P_3^5 = \frac{5!}{(5-3)!}\).</div></div></li>
+            <li><div class="w"><p>Required probability \(= P(Y=2 \text{ and a total of 6 road accidents occur})\)</p>
+              \[= C_2^5 C_2^3 [P(X=0)]^2 [P(X=1)]^2 [P(X=4)] + P_3^5 [P(X=0)]^2 [P(X=1)][P(X=2)][P(X=3)] + C_2^5 [P(X=0)]^2 [P(X=2)]^3\]</div><div class="why"><div>Sum the probabilities for all possible combinations.</div></div></li>
+            <li><div class="w">\[= C_2^5 C_2^3 (e^{-2})^2 \left[\frac{e^{-2}2^1}{1!}\right]^2 \left(\frac{e^{-2}2^4}{4!}\right) + P_3^5 (e^{-2})^2 \left(\frac{e^{-2}2^1}{1!}\right) \left(\frac{e^{-2}2^2}{2!}\right) \left(\frac{e^{-2}2^3}{3!}\right) + C_2^5 (e^{-2})^2 \left[\frac{e^{-2}2^2}{2!}\right]^3\]\[= \underline{0.0218} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Substitute the Poisson probabilities and evaluate.</div></div></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page" data-key="check" data-label="Check"><div class="check" data-sec="mixed"></div></div>
+</section>
+
+<!-- ===================== SUMMARY & NOTES ===================== -->
+<section class="view" id="v-summary" data-title="Summary & Notes" hidden>
+  <div class="head"><p class="eyebrow">Revision</p><h1>Summary & Self-Reflection</h1></div>
+  <div class="page" data-key="sum" data-label="Summary">
+    <div class="grid2">
+      <div class="defn">
+        <span class="lbl">Formulas at a Glance</span>
+        <p>• <strong>Bernoulli:</strong> \(E(X)=p, \operatorname{Var}(X)=p(1-p)\)</p>
+        <p>• <strong>Binomial:</strong> \(E(X)=np, \operatorname{Var}(X)=np(1-p)\)</p>
+        <p>• <strong>Poisson:</strong> \(E(X)=\lambda, \operatorname{Var}(X)=\lambda\)</p>
+      </div>
+      <div class="defn">
+        <span class="lbl">Exam Traps to Avoid</span>
+        <p>• Always write "(rejected)" when discarding an invalid \(p\).</p>
+        <p>• Flip inequality when dividing by \(\log(p)\) since \(\log(p)<0\).</p>
+        <p>• Adjust \(\lambda\) proportionally to match time intervals.</p>
+      </div>
+    </div>
+    <div style="margin-top:10px">
+      <h3>Questions / Inquiries for Class</h3>
+      <p class="small muted">Saved locally in your browser.</p>
+      <textarea id="notesBox" placeholder="Write any doubts or questions here (e.g. partition logic in Example 10.16)..."></textarea>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- MathJax Configuration -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  startup: { typeset: false }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+
+<script>
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const NS='http://www.w3.org/2000/svg';
+function S(p,t,a,txt){const e=document.createElementNS(NS,t);if(a)for(let k in a)e.setAttribute(k,a[k]);if(txt)e.textContent=txt;if(p)p.appendChild(e);return e;}
+
+/* Navigation State */
+const SECS=$$('main > .view').map(v=>({id:v.id.slice(2),el:v,title:v.dataset.title,pages:$$(':scope > .page',v)}));
+const CHECK_SECS=['bernoulli','binomial','poisson','mixed'];
+const seen=new Set(store.get('m1c10-seen',[]));
+const done=new Set(store.get('m1c10-done',[]));
+let cur={sec:'start',page:'home'};
+
+/* Build Nav Tree */
+const navList=$('#navList');
+SECS.forEach((s,i)=>{
+  const li=document.createElement('li');
+  li.innerHTML=`<a href="#${s.id}" data-sec="${s.id}"><span class="n">${i+1}</span><span>${s.title}</span><span class="tick">✓</span></a>`;
+  navList.appendChild(li);
+  if(s.pages.length>1){
+    const sn=document.createElement('div');sn.className='subnav';
+    sn.innerHTML=s.pages.map((p,k)=>`<button class="sp${p.dataset.ex?' ex':''}" data-sec="${s.id}" data-page="${p.dataset.key}"><span class="k">${p.dataset.key==='check'?'✓':k+1}</span>${p.dataset.label}</button>`).join('');
+    s.el.querySelector('.head').after(sn);
+  }
+  s.pages.forEach((p,k)=>{
+    if(s.id==='start'&&k===0)return;
+    const f=document.createElement('div');f.className='page-foot';
+    let prev = k>0 ? `<button class="btn" data-go="${s.id}|${s.pages[k-1].dataset.key}">← ${s.pages[k-1].dataset.label}</button>` : (i>0?`<button class="btn" data-go="${SECS[i-1].id}|">← ${SECS[i-1].title}</button>`:'<span></span>');
+    let next = k<s.pages.length-1 ? `<button class="btn primary" data-go="${s.id}|${s.pages[k+1].dataset.key}">${s.pages[k+1].dataset.label} →</button>` : (i<SECS.length-1?`<button class="btn primary" data-go="${SECS[i+1].id}|">Next: ${SECS[i+1].title} →</button>`:'<span></span>');
+    f.innerHTML=prev+next;p.appendChild(f);
+  });
+});
+
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[data-sec]');if(a){e.preventDefault();show(a.dataset.sec);return;}
+  const sp=e.target.closest('.sp');if(sp){show(sp.dataset.sec,sp.dataset.page);return;}
+  const g=e.target.closest('[data-go]');if(g){const [s,p]=g.dataset.go.split('|');show(s,p||null);}
+});
+
+function refreshProgress(){
+  const n=CHECK_SECS.filter(id=>done.has(id)).length;
+  $('#progFill').style.width=(n/CHECK_SECS.length*100)+'%';
+  $('#progTxt').textContent=n+'/'+CHECK_SECS.length;
+  $$('a[data-sec]').forEach(a=>a.classList.toggle('done',done.has(a.dataset.sec)));
+  $$('.sp').forEach(b=>b.classList.toggle('seen',seen.has(b.dataset.sec+'|'+b.dataset.page)));
+  store.set('m1c10-seen',[...seen]);store.set('m1c10-done',[...done]);
+}
+
+function typeset(el){
+  if(!el||el.dataset.tex==='1')return;
+  if(window.MathJax&&MathJax.typesetPromise){
+    el.dataset.tex='1';
+    MathJax.typesetPromise([el]).catch(()=>{el.dataset.tex='0'});
+  }
+}
+
+function show(secId,pageKey){
+  let s=SECS.find(x=>x.id===secId)||SECS[0];
+  let p=s.pages.find(x=>x.dataset.key===pageKey)||s.pages[0];
+  cur={sec:s.id,page:p.dataset.key};
+  SECS.forEach(x=>x.el.hidden=x!==s);
+  s.pages.forEach(x=>x.hidden=x!==p);
+  $$('.sp',s.el).forEach(b=>b.setAttribute('aria-current',b.dataset.page===p.dataset.key?'true':'false'));
+  $$('.nav a').forEach(a=>a.setAttribute('aria-current',a.dataset.sec===s.id?'page':'false'));
+  seen.add(s.id+'|'+p.dataset.key);
+  if(s.id==='summary'||s.id==='start')done.add(s.id);
+  
+  // Typeset both header and page
+  typeset(s.el.querySelector('.head'));
+  typeset(p);
+  refreshProgress();
+}
+
+/* Interactive Bernoulli Trial Simulator */
+(function(){
+  let currentExp = 'coin';
+  const exps = {
+    coin: { title: 'Throw a fair coin', succ: 'Head', fail: 'Tail', p: 0.5 },
+    target: { title: 'Shoot at a target', succ: 'Hit (Bullseye)', fail: 'Miss', p: 0.35 },
+    qc: { title: 'Test a manufactured product', succ: 'Defective (X=1)', fail: 'Normal (X=0)', p: 0.08 },
+    mc: { title: 'Guess 4-choice question', succ: 'Correct', fail: 'Incorrect', p: 0.25 }
+  };
+  let trials = 0, succs = 0, fails = 0;
+
+  function setExp(key){
+    currentExp = key;
+    $('#simExpTitle').textContent = exps[key].title;
+    $('#simExpResult').textContent = `Success = ${exps[key].succ} | Failure = ${exps[key].fail}`;
+    trials = 0; succs = 0; fails = 0;
+    updTally();
+  }
+
+  function updTally(){
+    $('#simTally').textContent = `Trials: ${trials} | Successes (X = 1): ${succs} | Failures (X = 0): ${fails}`;
+  }
+
+  $('#btnExpCoin').onclick = () => setExp('coin');
+  $('#btnExpTarget').onclick = () => setExp('target');
+  $('#btnExpQC').onclick = () => setExp('qc');
+  $('#btnExpMC').onclick = () => setExp('mc');
+
+  $('#btnRunTrial').onclick = () => {
+    trials++;
+    const isSucc = Math.random() < exps[currentExp].p;
+    if(isSucc) succs++; else fails++;
+    const resText = isSucc ? `Outcome: ${exps[currentExp].succ} (X = 1)` : `Outcome: ${exps[currentExp].fail} (X = 0)`;
+    $('#simExpResult').textContent = resText;
+    updTally();
+  };
+})();
+
+/* Binomial Dynamic Chart & Preset Buttons */
+(function(){
+  const svg=$('#binoDynSvg');if(!svg)return;
+  function fact(n){return n<=1?1:n*fact(n-1)}
+  function nCr(n,r){return fact(n)/(fact(r)*fact(n-r))}
+  function render(){
+    const n=+($('#bnSl').value), p=+($('#bpSl').value);
+    $('#bnOut').textContent=n; $('#bpOut').textContent=p.toFixed(2);
+    svg.innerHTML='';
+    S(svg,'line',{x1:20,x2:480,y1:150,y2:150,class:'axis'});
+    let probs=[];let maxP=0;
+    for(let x=0;x<=n;x++){
+      let prob=nCr(n,x)*Math.pow(p,x)*Math.pow(1-p,n-x);
+      probs.push(prob);if(prob>maxP)maxP=prob;
+    }
+    const bw=Math.max(6,Math.min(24,380/(n+1)-4));
+    for(let x=0;x<=n;x++){
+      const cx=40+x*(420/n);
+      const h=(probs[x]/Math.max(0.35,maxP))*120;
+      S(svg,'rect',{x:cx-bw/2,y:150-h,width:bw,height:h,class:'bar-v',rx:2});
+      S(svg,'text',{x:cx,y:166,class:'lbl-s','text-anchor':'middle'},x);
+      if(n<=10) S(svg,'text',{x:cx,y:142-h,class:'lbl-s','text-anchor':'middle'},probs[x].toFixed(2));
+    }
+    const mean=n*p, vr=n*p*(1-p);
+    const skew = p === 0.5 ? 'Symmetrical' : (p < 0.5 ? 'Skewed to the right' : 'Skewed to the left');
+    $('#binoStat').innerHTML=`<strong>Shape:</strong> ${skew} &nbsp;|&nbsp; <strong>Mean:</strong> E(X) = ${mean.toFixed(2)} &nbsp;|&nbsp; <strong>Variance:</strong> Var(X) = ${vr.toFixed(2)}`;
+  }
+  $('#bnSl').addEventListener('input',render);$('#bpSl').addEventListener('input',render);
+
+  $('#btnPresetSym').onclick = () => { $('#bpSl').value = 0.5; render(); };
+  $('#btnPresetRight').onclick = () => { $('#bpSl').value = 0.2; render(); };
+  $('#btnPresetLeft').onclick = () => { $('#bpSl').value = 0.75; render(); };
+  $('#btnPresetLarge').onclick = () => { $('#bnSl').value = 20; render(); };
+
+  render();
+})();
+
+/* Procedural Visualization for Worked Examples */
+const VIZ={};
+function genericViz(svg,title,meta){
+  svg.innerHTML='';
+  S(svg,'text',{x:160,y:25,class:'vt','text-anchor':'middle'},title);
+  S(svg,'line',{x1:20,x2:300,y1:140,y2:140,class:'axis'});
+  let g=S(svg,'g',{class:'fd'});
+  if(meta&&meta.bars){
+    meta.bars.forEach((b,idx)=>{
+      S(g,'rect',{x:40+idx*60,y:140-b.h,width:28,height:b.h,class:b.cls||'bar-v',rx:2});
+      S(svg,'text',{x:54+idx*60,y:158,class:'lbl-s','text-anchor':'middle'},b.lbl);
+    });
+  }
+  return (i)=>{ if(i>=0) g.classList.add('in'); else g.classList.remove('in'); };
+}
+
+VIZ.ex101=(svg)=>genericViz(svg,"13 Spades in 52 Cards",{bars:[{h:90,lbl:'X=0 (3/4)'},{h:30,lbl:'X=1 (1/4)',cls:'bar-a'}]});
+VIZ.ex102=(svg)=>genericViz(svg,"Bernoulli: 0.27 + k = 1",{bars:[{h:35,lbl:'0.27'},{h:95,lbl:'k = 0.73',cls:'bar-t'}]});
+VIZ.ex103=(svg)=>genericViz(svg,"B(4, 0.6)",{bars:[{h:15,lbl:'0'},{h:45,lbl:'1'},{h:100,lbl:'2'},{h:100,lbl:'3'},{h:40,lbl:'4'}]});
+VIZ.ex104=(svg)=>genericViz(svg,"Quadratic: p = 1/3 or 2/3",{bars:[{h:33,lbl:'p = 1/3',cls:'bar-t'},{h:66,lbl:'2/3 (rej)',cls:'bar-r'}]});
+VIZ.ex105=(svg)=>genericViz(svg,"Rainy Days B(7, 3/5)",{bars:[{h:20,lbl:'X<2'},{h:60,lbl:'X=3',cls:'bar-a'},{h:100,lbl:'X≤5',cls:'bar-t'}]});
+VIZ.ex106=(svg)=>genericViz(svg,"MC Pass Gate X ≥ 3",{bars:[{h:70,lbl:'Pass: X≥3',cls:'bar-t'},{h:10,lbl:'Full: X=5',cls:'bar-a'}]});
+
+/* Example 10.7 Tree Diagram Controller */
+VIZ.ex107=(svg)=>{
+  const b1 = svg.querySelectorAll('.b1');
+  const b2 = svg.querySelectorAll('.b2');
+  const b2a = svg.querySelectorAll('.b2a');
+  return (i)=>{
+    svg.querySelectorAll('.tree-branch, .tree-lbl').forEach(el=>{
+      el.classList.remove('hl-teal','hl-amber');
+    });
+    if(i===1){
+      // (a) Only first sample -> satisfactory
+      b1.forEach(el=>el.classList.add('hl-teal'));
+    } else if(i===2){
+      // (b) Re-sampling needed
+      b2.forEach(el=>el.classList.add('hl-amber'));
+    } else if(i>=3){
+      // (c) Total satisfactory paths (Stage 1 direct + Stage 2 re-sampling)
+      b1.forEach(el=>el.classList.add('hl-teal'));
+      b2.forEach(el=>el.classList.add('hl-teal'));
+      b2a.forEach(el=>el.classList.add('hl-teal'));
+    }
+  };
+};
+
+VIZ.ex108=(svg)=>genericViz(svg,"Traffic Jams in 5 Wks",{bars:[{h:25,lbl:'1 Wk'},{h:50,lbl:'5 Wks'},{h:5,lbl:'Unpleasant',cls:'bar-a'}]});
+VIZ.ex109=(svg)=>genericViz(svg,"Least n = 20 (Logs)",{bars:[{h:110,lbl:'n=20',cls:'bar-a'},{h:80,lbl:'P(X≤2)',cls:'bar-t'}]});
+VIZ.ex1010=(svg)=>genericViz(svg,"Sequential: 4th on 12th",{bars:[{h:35,lbl:'3 in 11'},{h:10,lbl:'4th on 12',cls:'bar-a'}]});
+VIZ.ex1011=(svg)=>genericViz(svg,"Sunny Calendar Constraints",{bars:[{h:45,lbl:'Mon-Fri'},{h:90,lbl:'Sat-Sun'},{h:30,lbl:'Posterior',cls:'bar-t'}]});
+VIZ.ex1012=(svg)=>genericViz(svg,"Poisson Po(4.5)",{bars:[{h:20,lbl:'X<2'},{h:80,lbl:'X=7',cls:'bar-a'},{h:110,lbl:'λ=4.5',cls:'bar-t'}]});
+VIZ.ex1013=(svg)=>genericViz(svg,"Hotline Calls λ=0.2 → 3",{bars:[{h:85,lbl:'1 min (0.2)'},{h:35,lbl:'15 min (3.0)',cls:'bar-a'}]});
+VIZ.ex1014=(svg)=>genericViz(svg,"Album Downloads: Po(5)+Po(4)",{bars:[{h:50,lbl:'Alb K (5)'},{h:40,lbl:'Alb T (4)'},{h:90,lbl:'Total E=9',cls:'bar-a'}]});
+VIZ.ex1015=(svg)=>genericViz(svg,"Poisson Stream & Marketing %",{bars:[{h:80,lbl:'Total Calls'},{h:50,lbl:'Marketing',cls:'bar-t'}]});
+VIZ.ex1016=(svg)=>genericViz(svg,"Junction Accidents Po(2)",{bars:[{h:40,lbl:'0 Acc/Wk'},{h:60,lbl:'Partitions',cls:'bar-a'}]});
+
+function initPlayer(p){
+  const svg=p.querySelector('.pviz svg');
+  let vizFn = VIZ[p.dataset.viz];
+  if (!vizFn) vizFn = ((s)=>genericViz(s,p.dataset.viz));
+
+  const go=vizFn(svg);
+  const items=$$('.pwork > li',p),n=items.length,empty=p.querySelector('.pempty');
+  const ctl=document.createElement('div');ctl.className='pctl';
+  ctl.innerHTML=`<button class="btn" data-a="back">◀ Back</button><button class="btn primary" data-a="next">Start ▶</button><span class="dots">${items.map(()=>'<i></i>').join('')}</span><button class="btn ghost" data-a="reset">Restart</button>`;
+  p.querySelector('.pmain').after(ctl);
+  let c=-1;
+  function upd(){
+    items.forEach((li,k)=>{li.classList.toggle('on',k<=c);li.classList.toggle('cur',k===c);});
+    $$('.dots i',ctl).forEach((d,k)=>d.classList.toggle('on',k<=c));
+    empty.hidden=c>=0;
+    ctl.querySelector('[data-a="back"]').disabled=c<0;
+    ctl.querySelector('[data-a="next"]').disabled=c>=n-1;
+    ctl.querySelector('[data-a="next"]').textContent=c<0?'Start ▶':c>=n-1?'Finished':'Next step ▶';
+    go(c);
+  }
+  ctl.addEventListener('click',e=>{
+    const a=e.target.closest('[data-a]')?.dataset.a;
+    if(a==='next')c=Math.min(n-1,c+1);
+    if(a==='back')c=Math.max(-1,c-1);
+    if(a==='reset')c=-1;
+    if(a)upd();
+  });
+  upd();
+}
+$$('.player').forEach(initPlayer);
+
+/* Section Check Quizzes */
+const CHECKS={
+  bernoulli:[
+    {t:'mcq',q:'Which of the following is a parameter of a Bernoulli distribution?',o:['Number of trials n','Probability of success p','Mean arrival rate λ'],a:1,e:'A Bernoulli distribution has exactly one parameter: \\(p\\).'},
+    {t:'num',q:'A Bernoulli variable has p = 0.3. Find its variance Var(X).',a:0.21,e:'\\(\\operatorname{Var}(X) = p(1-p) = 0.3 \\times 0.7 = 0.21\\).'}
+  ],
+  binomial:[
+    {t:'mcq',q:'If X ~ B(12, 0.25), what is the variance Var(X)?',o:['3.00','2.25','0.75','1.50'],a:1,e:'\\(\\operatorname{Var}(X) = np(1-p) = 12 \\times 0.25 \\times 0.75 = 2.25\\).'},
+    {t:'num',q:'X ~ B(4, 0.5). Find P(X = 0) as a decimal.',a:0.0625,e:'\\(P(X=0) = (0.5)^4 = 0.0625\\).'}
+  ],
+  poisson:[
+    {t:'num',q:'If X ~ Po(3.2), what is the variance Var(X)?',a:3.2,e:'For any Poisson distribution, \\(\\operatorname{Var}(X) = \\lambda = 3.2\\).'},
+    {t:'mcq',q:'Cars arrive at a rate of 2 per minute. What is the expected number of arrivals in 5 minutes?',o:['2','5','10','20'],a:2,e:'Scale linearly: \\(\\lambda = 2 \\times 5 = 10\\).'}
+  ],
+  mixed:[
+    {t:'mcq',q:'Which distribution models "number of flaws in 100 metres of fabric"?',o:['Bernoulli','Binomial','Poisson'],a:2,e:'Events in a continuous physical interval/space follow a Poisson model.'}
+  ]
+};
+
+let cstate=store.get('m1c10-checks',{});
+function renderCheck(sec){
+  const box=$('.check[data-sec="'+sec+'"]');if(!box)return;
+  const Q=CHECKS[sec],st=cstate[sec]||{};
+  let h='<div class="head"><h2>Check Yourself</h2><p class="muted small">Test your core concepts for this section.</p></div>';
+  h+=Q.map((q,i)=>{
+    const s=st[i];let body='';
+    if(q.t==='mcq')body='<div class="qopts">'+q.o.map((o,k)=>`<button class="btn qopt ${s?(k===q.a?'right':(k===s.ans?'wrong':'')):''}" data-cq="${sec}|${i}" data-k="${k}" ${s?'disabled':''}>${String.fromCharCode(65+k)}. ${o}</button>`).join('')+'</div>';
+    else body=`<div class="qin"><input id="ci-${sec}-${i}" value="${s?s.ans:''}" ${s?'disabled':''}><button class="btn primary" data-cq="${sec}|${i}" data-check="1" ${s?'disabled':''}>Check</button></div>`;
+    const fb=s?`<div class="qfb ${s.ok?'ok':'no'}"><strong>${s.ok?'Correct!':'Incorrect.'}</strong> ${q.e}</div>`:'';
+    return `<div class="qcard"><div class="qh"><span class="qn">Q${i+1}</span><span>${q.q}</span></div>${body}${fb}</div>`;
+  }).join('');
+  box.innerHTML=h;
+  if(Object.values(st).length===Q.length&&!done.has(sec)){done.add(sec);refreshProgress();}
+}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-cq]');if(!b)return;
+  const [sec,i]=b.dataset.cq.split('|');const q=CHECKS[sec][+i];cstate[sec]=cstate[sec]||{};
+  if(q.t==='mcq'){const k=+b.dataset.k;cstate[sec][i]={ans:k,ok:k===q.a};}
+  else{
+    const val=parseFloat($('#ci-'+sec+'-'+i).value);
+    cstate[sec][i]={ans:$('#ci-'+sec+'-'+i).value,ok:Math.abs(val-q.a)<0.005};
+  }
+  store.set('m1c10-checks',cstate);
+  renderCheck(sec);
+});
+
+CHECK_SECS.forEach(renderCheck);
+
+/* Notes scratchpad persistence */
+const nb=$('#notesBox');
+if(nb){
+  nb.value=store.get('m1c10-notes','');
+  nb.addEventListener('input',()=>store.set('m1c10-notes',nb.value));
+}
+
+/* Route to hash */
+const h=(location.hash||'').slice(1);
+const hs=h.split('-');
+show(hs[0]||'start',hs.slice(1).join('-')||null);
+})();
+</script>
+</body>
+</html>
