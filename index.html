@@ -293,6 +293,9 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
   <div class="head"><p class="eyebrow">Section 10.1A</p><h1>Bernoulli Distribution</h1></div>
 
   <div class="page" data-key="idea" data-label="Concepts">
+    <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 16px; border: 1px solid var(--line);">
+      <iframe src="https://www.youtube.com/embed/nl9WiZMZnYs" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+    </div>
     <p>A <span class="term">Bernoulli trial</span> is an experiment with exactly two outcomes: <em>success</em> (\(X=1\)) with probability \(p\), and <em>failure</em> (\(X=0\)) with probability \(1-p\).</p>
     <div class="defn">
       <span class="lbl">Probability Function</span>
@@ -328,7 +331,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
     <!-- Formula Derivation Accordion -->
     <details class="note tip"><summary><span class="lb">Derivation</span> How we derive the Bernoulli Mean & Variance</summary><div class="body">
       <p>By definition of expectation for a discrete random variable:</p>
-      \[E(X) = \sum x P(X=x) = 0 \cdot P(X=0) + 1 \cdot P(X=1) = 0(1-p) + 1(p) = p\]
+      \[E(X) = \sum x P(X=x) = 0 \cdot P(X=0) + 1 \cdot P(X=1) = 0(1-p) + 1 \cdot p = p\]
       <p>For the variance, we first find \(E(X^2)\):</p>
       \[E(X^2) = \sum x^2 P(X=x) = 0^2(1-p) + 1^2(p) = p\]
       <p>Then applying \(\operatorname{Var}(X) = E(X^2) - [E(X)]^2\):</p>
@@ -354,7 +357,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <ol class="pwork">
             <li><div class="w"><p>\(X\) has only two possible values: 0 and 1. \(X\) follows a Bernoulli distribution with the probability of success equal to \(P(\text{A spade})\).</p></div><div class="why"><div>A single draw with two mutually exclusive outcomes is a Bernoulli trial.</div></div></li>
             <li><div class="w">\[P(X=1) = \frac{13}{52} = \frac{1}{4}, \quad P(X=0) = 1 - \frac{1}{4} = \frac{3}{4}\]</div><div class="why"><div>Identify the parameter \(p\) and \(1-p\).</div></div></li>
-            <li><div class="w"><p>(a)(i) The probability distribution of \(X\) is as follows:</p><div class="dtwrap"><table class="dt"><tr><th>\(x\)</th><td>0</td><td>1</td></tr><tr><th>\(P(X=x)\)</th><td>\(3/4\)</td><td>\(1/4\)</td></tr></table></div></div><div class="why"><div>All probabilities are non-negative and sum to 1: \(3/4 + 1/4 = 1\).</div></div></li>
+            <li><div class="w"><p>(a)(i) The probability distribution of \(X\) is as follows:</p><div class="dtwrap"><table class="dt"><tr><th>\(x\)</th><td>0</td><td>1</td></tr><tr><th>\(P(X=x)\)</th><td>\(\frac{3}{4}\)</td><td>\(\frac{1}{4}\)</td></tr></table></div></div><div class="why"><div>All probabilities are non-negative and sum to 1: \(\frac{3}{4} + \frac{1}{4} = 1\).</div></div></li>
             <li><div class="w"><p>(a)(ii) \(P(X=x) = \left(\frac{1}{4}\right)^x \left(\frac{3}{4}\right)^{1-x}\) for \(x=0, 1\).</p></div><div class="why"><div>Always specify the domain "\(x=0, 1\)" to make the formula complete.</div></div></li>
             <li><div class="w">\[\text{(b)}\quad \text{Mean of } X = p = E(X) = \underline{\frac{1}{4}}\]</div><div class="why"><div>Use the derived property \(E(X) = p\) directly.</div></div></li>
             <li><div class="w">\[\text{Variance of } X = p(1-p) = \left(\frac{1}{4}\right)\left(\frac{3}{4}\right) = \underline{\frac{3}{16}}\]</div><div class="why"><div>Use the derived property \(\operatorname{Var}(X) = p(1-p)\).</div></div></li>
@@ -398,10 +401,13 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
   <div class="head"><p class="eyebrow">Section 10.1B & C</p><h1>Binomial Distribution <i>B</i>(<i>n</i>, <i>p</i>)</h1></div>
 
   <div class="page" data-key="idea" data-label="Concepts">
+    <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 16px; border: 1px solid var(--line);">
+      <iframe src="https://www.youtube.com/embed/_FbZI9mtSSM" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+    </div>
     <p>When a Bernoulli trial with success probability \(p\) is repeated \(n\) times <strong>independently</strong>, the number of successes \(X\) is a binomial variable:</p>
     <div class="defn">
       <span class="lbl">Binomial Distribution \(B(n, p)\)</span>
-      \[P(X=x) = C_x^n p^x (1-p)^{n-x} \quad \text{for } x = 0, 1, 2, \dots, n\]
+      \[P(X=x) = _{ n }C_{ x } p^x (1-p)^{n-x} \quad \text{for } x = 0, 1, 2, \dots, n\]
       <hr style="border:0;border-top:1px solid var(--line);margin:8px 0">
       <p><strong>Mean and Variance:</strong></p>
       \[\mu = E(X) = np \qquad\text{and}\qquad \sigma^2 = \operatorname{Var}(X) = np(1-p)\]
@@ -412,12 +418,12 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
       <p>Consider tossing a coin \(n=3\) times where \(P(\text{Head}) = p\) and \(P(\text{Tail}) = 1-p\):</p>
       <ol style="margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:4px">
         <li>Any single specific outcome with \(x\) heads and \((n-x)\) tails (e.g. \(H, T, T\)) has probability \(p^x (1-p)^{n-x}\) because trials are independent.</li>
-        <li>How many ways can we arrange \(x\) heads among \(n\) trials? This is equivalent to putting \(x\) letters \(H\) into \(n\) ordered slots: \(C_x^n\) ways.</li>
+        <li>How many ways can we arrange \(x\) heads among \(n\) trials? This is equivalent to putting \(x\) letters \(H\) into \(n\) ordered slots: \(_{ n }C_{ x }\) ways.</li>
         <li>Multiplying the count of ways by the probability of each way yields:
-          \[P(X=x) = C_x^n p^x (1-p)^{n-x}\]
+          \[P(X=x) = _{ n }C_{ x } p^x (1-p)^{n-x}\]
         </li>
         <li><strong>Sum of probabilities:</strong> By the Binomial Theorem:
-          \[\sum_{x=0}^n P(X=x) = \sum_{x=0}^n C_x^n p^x (1-p)^{n-x} = [p + (1-p)]^n = 1^n = 1\]
+          \[\sum_{x=0}^n P(X=x) = \sum_{x=0}^n _{ n }C_{ x } p^x (1-p)^{n-x} = [p + (1-p)]^n = 1^n = 1\]
         </li>
       </ol>
     </div></details>
@@ -474,8 +480,8 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
         <div>
           <p class="pempty">Try it on paper first, then press Start ▶</p>
           <ol class="pwork">
-            <li><div class="w"><p>\(X \sim B(4, 0.6) \implies P(X=x) = C_x^4 (0.6)^x (0.4)^{4-x}\) for \(x=0, 1, 2, 3, 4\).</p></div><div class="why"><div>Substitute the parameters \(n=4\) and \(p=0.6\) into the general formula.</div></div></li>
-            <li><div class="w"><p>\(P(X=0) = (0.4)^4 = 0.0256\)<br>\(P(X=1) = C_1^4(0.6)(0.4)^3 = 0.1536\)<br>\(P(X=2) = C_2^4(0.6)^2(0.4)^2 = 0.3456\)<br>\(P(X=3) = C_3^4(0.6)^3(0.4) = 0.3456\)<br>\(P(X=4) = (0.6)^4 = 0.1296\)</p></div><div class="why"><div>Evaluate each term to build the table.</div></div></li>
+            <li><div class="w"><p>\(X \sim B(4, 0.6) \implies P(X=x) = _{ 4 }C_{ x } (0.6)^x (0.4)^{4-x}\) for \(x=0, 1, 2, 3, 4\).</p></div><div class="why"><div>Substitute the parameters \(n=4\) and \(p=0.6\) into the general formula.</div></div></li>
+            <li><div class="w"><p>\(P(X=0) = (0.4)^4 = 0.0256\)<br>\(P(X=1) = _{ 4 }C_{ 1 }(0.6)(0.4)^3 = 0.1536\)<br>\(P(X=2) = _{ 4 }C_{ 2 }(0.6)^2(0.4)^2 = 0.3456\)<br>\(P(X=3) = _{ 4 }C_{ 3 }(0.6)^3(0.4) = 0.3456\)<br>\(P(X=4) = (0.6)^4 = 0.1296\)</p></div><div class="why"><div>Evaluate each term to build the table.</div></div></li>
             <li><div class="w"><p>(a) The probability distribution of \(X\) is as follows:</p><div class="dtwrap"><table class="dt"><tr><th>\(x\)</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>\(P(X=x)\)</th><td>0.0256</td><td>0.1536</td><td>0.3456</td><td>0.3456</td><td>0.1296</td></tr></table></div></div><div class="why"><div>Table representations must contain all possible values of \(x\) and their corresponding probabilities.</div></div></li>
             <li><div class="w">\[\text{(b)}\quad P(1 \le X \le 2) = P(X=1) + P(X=2) = 0.1536 + 0.3456 = \underline{0.4992}\]</div><div class="why"><div>Events \(X=1\) and \(X=2\) are mutually exclusive, so add their probabilities.</div></div></li>
             <li><div class="w">\[P(X > 0) = 1 - P(X=0) = 1 - 0.0256 = \underline{0.9744}\]</div><div class="why"><div>Complement rule: subtracting \(P(X=0)\) is much faster than summing 4 terms.</div></div></li>
@@ -505,10 +511,10 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <ol class="pwork">
             <li><div class="w">\[\text{(a)}\quad \operatorname{Var}(X) = \frac{8}{9}\]\[4p(1-p) = \frac{8}{9}\]</div><div class="why"><div>Substitute \(n=4\) and variance into the formula \(\operatorname{Var}(X) = np(1-p)\).</div></div></li>
             <li><div class="w">\[9p^2 - 9p + 2 = 0 \implies (3p-1)(3p-2) = 0\]</div><div class="why"><div>Expand into standard quadratic form.</div></div></li>
-            <li><div class="w">\[p = \underline{\frac{1}{3}} \quad\text{or}\quad \frac{2}{3} \text{ (rejected)}\]</div><div class="why"><div>Always test constraints explicitly. Reject \(2/3\) since \(0 < p < 0.5\).</div></div></li>
+            <li><div class="w">\[p = \underline{\frac{1}{3}} \quad\text{or}\quad \frac{2}{3} \text{ (rejected)}\]</div><div class="why"><div>Always test constraints explicitly. Reject \(\frac{2}{3}\) since \(0 < p < 0.5\).</div></div></li>
             <li><div class="w">\[\text{(b)}\quad E(X) = np = 4\left(\frac{1}{3}\right) = \underline{\frac{4}{3}}\]</div><div class="why"><div>Substitute \(n\) and \(p\) into the expected value formula.</div></div></li>
             <li><div class="w">\[\text{(c)}\quad P(X < 4) = 1 - P(X=4) = 1 - \left(\frac{1}{3}\right)^4 = 0.9877 \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Calculate cumulative probabilities downwards from the maximum value \(n=4\).</div></div></li>
-            <li><div class="w">\[P(X < 3) = 1 - P(X=4) - P(X=3)\]\[= 1 - \left(\frac{1}{3}\right)^4 - C_3^4\left(\frac{1}{3}\right)^3\left(\frac{2}{3}\right) = 0.8889 \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Check the next integer down.</div></div></li>
+            <li><div class="w">\[P(X < 3) = 1 - P(X=4) - P(X=3)\]\[= 1 - \left(\frac{1}{3}\right)^4 - _{ 4 }C_{ 3 }\left(\frac{1}{3}\right)^3\left(\frac{2}{3}\right) = 0.8889 \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Check the next integer down.</div></div></li>
             <li><div class="w"><p>\(P(X < 3) < 0.9\) and \(P(X < 4) > 0.9\).</p><p>The greatest value of \(k\) is <u>3</u>.</p></div><div class="why"><div>\(k=3\) is the highest integer satisfying the strict inequality \(< 0.9\).</div></div></li>
           </ol>
         </div>
@@ -521,7 +527,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
     <div class="player" data-viz="ex105">
       <div class="pq">
         <div class="qh"><span class="tag amber">Example 10.5</span><h3>Problem involving a binomial distribution</h3></div>
-        <p>In a summer, the probability of having a rainy day is \(3/5\). It is known that the weather in any day is independent of the weather in the other days. Let \(X\) be the number of rainy days in a summer week.</p>
+        <p>In a summer, the probability of having a rainy day is \(\frac{3}{5}\). It is known that the weather in any day is independent of the weather in the other days. Let \(X\) be the number of rainy days in a summer week.</p>
         <ol class="parts">
           <li><b>(a)</b><span>Represent the probability distribution of \(X\) by a formula.</span></li>
           <li><b>(b)</b><span>Find the probabilities that, in a summer week, there are (i) exactly 3 rainy days, (ii) less than 2 rainy days, (iii) at most 5 rainy days.</span></li>
@@ -534,10 +540,10 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <p class="pempty">Try it on paper first, then press Start ▶</p>
           <ol class="pwork">
             <li><div class="w"><p>There are 7 identical and independent Bernoulli trials (i.e. the 7 days in a summer week). \(X\) is the number of successes (i.e. rainy days) in these 7 trials.</p><p>\(\therefore X\) follows a binomial distribution. \(X \sim B\left(7, \frac{3}{5}\right)\)</p></div><div class="why"><div>Establish the parameters first. The trials (days) are independent.</div></div></li>
-            <li><div class="w">\[\text{(a)}\quad \text{The probability distribution of } X \text{ is }\]\[P(X=x) = C_x^7 \left(\frac{3}{5}\right)^x \left(\frac{2}{5}\right)^{7-x} \quad \text{for } x=0, 1, 2, \dots, 7.\]</div><div class="why"><div>Substitute \(n=7\), \(p=3/5\), and \(1-p = 2/5\) into the binomial probability function.</div></div></li>
-            <li><div class="w">\[\text{(b)(i)}\quad P(\text{Exactly 3 rainy days}) = P(X=3) = C_3^7 \left(\frac{3}{5}\right)^3 \left(\frac{2}{5}\right)^4 = \underline{0.1935} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Substitute \(x=3\) directly.</div></div></li>
-            <li><div class="w">\[\text{(ii)}\quad P(\text{Less than 2 rainy days}) = P(X < 2) = P(X=0) + P(X=1)\]\[= \left(\frac{2}{5}\right)^7 + C_1^7\left(\frac{3}{5}\right)\left(\frac{2}{5}\right)^6 = \underline{0.0188} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>"Less than 2" means strictly less than 2, so \(x=0\) and \(x=1\).</div></div></li>
-            <li><div class="w">\[\text{(iii)}\quad P(\text{At most 5 rainy days}) = P(X \le 5) = 1 - P(X=6) - P(X=7)\]\[= 1 - C_6^7\left(\frac{3}{5}\right)^6\left(\frac{2}{5}\right) - \left(\frac{3}{5}\right)^7 = \underline{0.8414} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Evaluating two complement terms is much faster than summing six terms (\(x=0\) to \(5\)).</div></div></li>
+            <li><div class="w">\[\text{(a)}\quad \text{The probability distribution of } X \text{ is }\]\[P(X=x) = _{ 7 }C_{ x } \left(\frac{3}{5}\right)^x \left(\frac{2}{5}\right)^{7-x} \quad \text{for } x=0, 1, 2, \dots, 7.\]</div><div class="why"><div>Substitute \(n=7\), \(p=\frac{3}{5}\), and \(1-p = \frac{2}{5}\) into the binomial probability function.</div></div></li>
+            <li><div class="w">\[\text{(b)(i)}\quad P(\text{Exactly 3 rainy days}) = P(X=3) = _{ 7 }C_{ 3 } \left(\frac{3}{5}\right)^3 \left(\frac{2}{5}\right)^4 = \underline{0.1935} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Substitute \(x=3\) directly.</div></div></li>
+            <li><div class="w">\[\text{(ii)}\quad P(\text{Less than 2 rainy days}) = P(X < 2) = P(X=0) + P(X=1)\]\[= \left(\frac{2}{5}\right)^7 + _{ 7 }C_{ 1 }\left(\frac{3}{5}\right)\left(\frac{2}{5}\right)^6 = \underline{0.0188} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>"Less than 2" means strictly less than 2, so \(x=0\) and \(x=1\).</div></div></li>
+            <li><div class="w">\[\text{(iii)}\quad P(\text{At most 5 rainy days}) = P(X \le 5) = 1 - P(X=6) - P(X=7)\]\[= 1 - _{ 7 }C_{ 6 }\left(\frac{3}{5}\right)^6\left(\frac{2}{5}\right) - \left(\frac{3}{5}\right)^7 = \underline{0.8414} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Evaluating two complement terms is much faster than summing six terms (\(x=0\) to \(5\)).</div></div></li>
             <li><div class="w">\[\text{(c)}\quad \text{Mean of the number of rainy days } = E(X) = 7\left(\frac{3}{5}\right) = \underline{\frac{21}{5}}\]\[\text{Variance of the number of rainy days } = \operatorname{Var}(X) = 7\left(\frac{3}{5}\right)\left(\frac{2}{5}\right) = \underline{\frac{42}{25}}\]</div><div class="why"><div>Apply \(E(X) = np\) and \(\operatorname{Var}(X) = np(1-p)\). Keep exact fractions.</div></div></li>
           </ol>
         </div>
@@ -561,11 +567,11 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
         <div>
           <p class="pempty">Try it on paper first, then press Start ▶</p>
           <ol class="pwork">
-            <li><div class="w"><p>There are 5 identical and independent Bernoulli trials (i.e. the 5 questions in the test). \(X\) is the number of successes (i.e. questions answered correctly) in these 5 trials.</p><p>\(\therefore X\) follows a binomial distribution. \(X \sim B\left(5, \frac{1}{4}\right)\)</p></div><div class="why"><div>Translate the problem into a Binomial model with \(n=5\) and \(p=1/4\).</div></div></li>
+            <li><div class="w"><p>There are 5 identical and independent Bernoulli trials (i.e. the 5 questions in the test). \(X\) is the number of successes (i.e. questions answered correctly) in these 5 trials.</p><p>\(\therefore X\) follows a binomial distribution. \(X \sim B\left(5, \frac{1}{4}\right)\)</p></div><div class="why"><div>Translate the problem into a Binomial model with \(n=5\) and \(p=\frac{1}{4}\).</div></div></li>
             <li><div class="w"><p>Moreover, in order to get 6 marks or above, at least 3 questions should be answered correctly.</p></div><div class="why"><div>Translate the mark scheme into the count of successful trials (\(2X \ge 6 \implies X \ge 3\)).</div></div></li>
-            <li><div class="w">\[\text{(a)}\quad \text{Required probability } = P(X \ge 3) = P(X=3) + P(X=4) + P(X=5)\]\[= C_3^5\left(\frac{1}{4}\right)^3\left(\frac{3}{4}\right)^2 + C_4^5\left(\frac{1}{4}\right)^4\left(\frac{3}{4}\right) + \left(\frac{1}{4}\right)^5 = \underline{0.1035} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Sum the mutually exclusive events \(X=3, 4, 5\).</div></div></li>
+            <li><div class="w">\[\text{(a)}\quad \text{Required probability } = P(X \ge 3) = P(X=3) + P(X=4) + P(X=5)\]\[= _{ 5 }C_{ 3 }\left(\frac{1}{4}\right)^3\left(\frac{3}{4}\right)^2 + _{ 5 }C_{ 4 }\left(\frac{1}{4}\right)^4\left(\frac{3}{4}\right) + \left(\frac{1}{4}\right)^5 = \underline{0.1035} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Sum the mutually exclusive events \(X=3, 4, 5\).</div></div></li>
             <li><div class="w">\[\text{(b)}\quad \text{Required probability } = P(X=5 \mid X \ge 3) = \frac{P(X=5)}{P(X \ge 3)}\]</div><div class="why"><div>Full marks are obtained when \(X=5\). Since \(X=5\) is a subset of \(X \ge 3\), the intersection \(P(X=5 \cap X \ge 3) = P(X=5)\).</div></div></li>
-            <li><div class="w">\[\approx \frac{(1/4)^5}{0.103516} = \underline{0.0094} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Use the unrounded value of \(P(X \ge 3)\) from part (a) to avoid rounding errors.</div></div></li>
+            <li><div class="w">\[\approx \frac{\left(\frac{1}{4}\right)^5}{0.103516} = \underline{0.0094} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Use the unrounded value of \(P(X \ge 3)\) from part (a) to avoid rounding errors.</div></div></li>
           </ol>
         </div>
       </div>
@@ -635,10 +641,10 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <ol class="pwork">
             <li><div class="w"><p>Let \(X_1\) be the number of defective items in the first sample and \(X_2\) be the number of defective items in the second sample, then</p>\[X_1 \sim B(3, 0.05) \quad \text{and} \quad X_2 \sim B(4, 0.05)\]</div><div class="why"><div>Define the two independent binomial distributions.</div></div></li>
             <li><div class="w">\[\text{(a)}\quad \text{Required probability } = P(X_1=0) = (0.95)^3 = \underline{0.8574} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>First stage passes immediately if all 3 items are good (top branch).</div></div></li>
-            <li><div class="w">\[\text{(b)}\quad \text{Required probability } = P(X_1=1) = C_1^3(0.05)(0.95)^2 = \underline{0.1354} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Resampling trigger condition (middle branch).</div></div></li>
+            <li><div class="w">\[\text{(b)}\quad \text{Required probability } = P(X_1=1) = _{ 3 }C_{ 1 }(0.05)(0.95)^2 = \underline{0.1354} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Resampling trigger condition (middle branch).</div></div></li>
             <li><div class="w"><p>(c) Required probability</p>\[= P(\text{The result of the first sample is satisfactory})\]\[+ P(\text{Re-sampling is needed and the result of the second sample is satisfactory})\]</div><div class="why"><div>Apply the Law of Total Probability for the two pathways to a satisfactory result.</div></div></li>
             <li><div class="w">\[= P(X_1=0) + P(X_1=1) \times P(X_2 \le 1)\]</div><div class="why"><div>The result of the 1st sample is independent of the result of the 2nd sample.</div></div></li>
-            <li><div class="w">\[= (0.95)^3 + C_1^3(0.05)(0.95)^2 \times [(0.95)^4 + C_1^4(0.05)(0.95)^3]\]\[= \underline{0.9909} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Carry full precision in intermediate steps to maintain accuracy.</div></div></li>
+            <li><div class="w">\[= (0.95)^3 + _{ 3 }C_{ 1 }(0.05)(0.95)^2 \times [(0.95)^4 + _{ 4 }C_{ 1 }(0.05)(0.95)^3]\]\[= \underline{0.9909} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Carry full precision in intermediate steps to maintain accuracy.</div></div></li>
           </ol>
         </div>
       </div>
@@ -662,11 +668,11 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <p class="pempty">Try it on paper first, then press Start ▶</p>
           <ol class="pwork">
             <li><div class="w"><p>(a) Let \(X\) be the number of working days in a week that Ryan is stuck in a traffic jam, then \(X \sim B(5, 0.25)\).</p></div><div class="why"><div>Establish the base binomial distribution for a single week.</div></div></li>
-            <li><div class="w">\[\text{(i)}\quad P(\text{A poor traffic week}) = P(X > 3) = P(X=4) + P(X=5)\]\[= C_4^5 (0.25)^4(0.75) + (0.25)^5 = \underline{0.0156} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>"More than 3" means 4 or 5.</div></div></li>
+            <li><div class="w">\[\text{(i)}\quad P(\text{A poor traffic week}) = P(X > 3) = P(X=4) + P(X=5)\]\[= _{ 5 }C_{ 4 } (0.25)^4(0.75) + (0.25)^5 = \underline{0.0156} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>"More than 3" means 4 or 5.</div></div></li>
             <li><div class="w">\[\text{(ii)}\quad \text{Expected number of working days... in a week} = E(X) = 5(0.25) = \underline{1.25}\]</div><div class="why"><div>Apply \(E(X) = np\).</div></div></li>
             <li><div class="w"><p>(iii) Number of working days in 5 weeks = \(5 \times 5 = 25\).</p>\[\text{Expected number of working days in 5 weeks...} = 25(0.25) = \underline{6.25}\]</div><div class="why"><div>Expectation scales linearly.</div></div></li>
             <li><div class="w"><p>(b) Let \(Y\) be the number of poor traffic weeks in next month, then \(Y \sim B(4, p)\), where \(p = P(X > 3) = 0.015625\).</p></div><div class="why"><div>A new Binomial variable where the trial outcome is whether a week was poor.</div></div></li>
-            <li><div class="w">\[\text{(i)}\quad P(\text{An unpleasant month}) = P(Y \ge 2) = P(Y=2) + P(Y=3) + P(Y=4)\]\[= C_2^4(0.015625)^2(0.984375)^2 + C_3^4(0.015625)^3(0.984375) + (0.015625)^4 = \underline{0.0014} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Apply the Binomial formula to the new variable \(Y\). Use the exact value of \(p\).</div></div></li>
+            <li><div class="w">\[\text{(i)}\quad P(\text{An unpleasant month}) = P(Y \ge 2) = P(Y=2) + P(Y=3) + P(Y=4)\]\[= _{ 4 }C_{ 2 }(0.015625)^2(0.984375)^2 + _{ 4 }C_{ 3 }(0.015625)^3(0.984375) + (0.015625)^4 = \underline{0.0014} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Apply the Binomial formula to the new variable \(Y\). Use the exact value of \(p\).</div></div></li>
             <li><div class="w">\[\text{(ii)}\quad \text{Expected number of poor traffic weeks in next month} = E(Y) = 4(0.015625) = \underline{0.0625}\]</div><div class="why"><div>Apply \(E(Y) = np\) for the month.</div></div></li>
           </ol>
         </div>
@@ -679,7 +685,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
     <div class="player" data-viz="ex109">
       <div class="pq">
         <div class="qh"><span class="tag amber">Example 10.9</span><h3>Problem involving a binomial distribution</h3></div>
-        <p>In each throw of an unfair dice, the probability of obtaining a '6' is 1/9. Suppose James throws the dice \(n\) times.</p>
+        <p>In each throw of an unfair dice, the probability of obtaining a '6' is \(\frac{1}{9}\). Suppose James throws the dice \(n\) times.</p>
         <ol class="parts">
           <li><b>(a)</b><span>Find the least value of \(n\) such that the probability of obtaining at least one '6' is greater than 0.9.</span></li>
           <li><b>(b)</b><span>For the value of \(n\) obtained in (a), find the probability of obtaining at most two '6's. (Give your answer correct to 4 decimal places.)</span></li>
@@ -690,13 +696,13 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
         <div>
           <p class="pempty">Try it on paper first, then press Start ▶</p>
           <ol class="pwork">
-            <li><div class="w"><p>(a) Let \(X\) be the number of '6's obtained, then \(X \sim B(n, 1/9)\).</p>\[P(X \ge 1) > 0.9 \implies 1 - P(X=0) > 0.9\]</div><div class="why"><div>Set up the inequality based on the question. "At least one" is the complement of "none".</div></div></li>
+            <li><div class="w"><p>(a) Let \(X\) be the number of '6's obtained, then \(X \sim B\left(n, \frac{1}{9}\right)\).</p>\[P(X \ge 1) > 0.9 \implies 1 - P(X=0) > 0.9\]</div><div class="why"><div>Set up the inequality based on the question. "At least one" is the complement of "none".</div></div></li>
             <li><div class="w">\[1 - \left(\frac{8}{9}\right)^n > 0.9 \implies \left(\frac{8}{9}\right)^n < 0.1\]</div><div class="why"><div>Substitute \(P(X=0)\). Then isolate the term with \(n\).</div></div></li>
             <li><div class="w">\[n \log\left(\frac{8}{9}\right) < \log 0.1\]</div><div class="why"><div>Take the logarithm of both sides. Bring down the exponent \(n\).</div></div></li>
-            <li><div class="w">\[n > \frac{\log 0.1}{\log(8/9)}\]\[n > 19.55 \text{ (cor. to 2 d.p.)}\]</div><div class="why"><div>Since \(\log(8/9) < 0\), the inequality sign <strong>must flip</strong> when you divide by it.</div></div></li>
+            <li><div class="w">\[n > \frac{\log 0.1}{\log\left(\frac{8}{9}\right)}\]\[n > 19.55 \text{ (cor. to 2 d.p.)}\]</div><div class="why"><div>Since \(\log\left(\frac{8}{9}\right) < 0\), the inequality sign <strong>must flip</strong> when you divide by it.</div></div></li>
             <li><div class="w"><p>The least value of \(n\) is <u>20</u>.</p></div><div class="why"><div>Since \(n\) must be an integer, take the next whole number above 19.55.</div></div></li>
-            <li><div class="w"><p>(b) Required probability = \(P(X \le 2)\)</p>\[= P(X=0) + P(X=1) + P(X=2)\]</div><div class="why"><div>Using \(X \sim B(20, 1/9)\).</div></div></li>
-            <li><div class="w">\[= \left(\frac{8}{9}\right)^{20} + C_1^{20}\left(\frac{1}{9}\right)\left(\frac{8}{9}\right)^{19} + C_2^{20}\left(\frac{1}{9}\right)^2\left(\frac{8}{9}\right)^{18} = \underline{0.6134} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Sum terms for \(x=0, 1, 2\).</div></div></li>
+            <li><div class="w"><p>(b) Required probability = \(P(X \le 2)\)</p>\[= P(X=0) + P(X=1) + P(X=2)\]</div><div class="why"><div>Using \(X \sim B\left(20, \frac{1}{9}\right)\).</div></div></li>
+            <li><div class="w">\[= \left(\frac{8}{9}\right)^{20} + _{ 20 }C_{ 1 }\left(\frac{1}{9}\right)\left(\frac{8}{9}\right)^{19} + _{ 20 }C_{ 2 }\left(\frac{1}{9}\right)^2\left(\frac{8}{9}\right)^{18} = \underline{0.6134} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Sum terms for \(x=0, 1, 2\).</div></div></li>
           </ol>
         </div>
       </div>
@@ -720,7 +726,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <p class="pempty">Try it on paper first, then press Start ▶</p>
           <ol class="pwork">
             <li><div class="w"><p>(a) Let \(X\) be the number of defective items found out of 11 items inspected, then \(X \sim B(11, 0.07)\).</p></div><div class="why"><div>Define the binomial distribution for the first 11 items.</div></div></li>
-            <li><div class="w">\[\text{Required probability } = P(X=3) = C_3^{11} (0.07)^3 (0.93)^8 = \underline{0.0317} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Standard binomial probability.</div></div></li>
+            <li><div class="w">\[\text{Required probability } = P(X=3) = _{ 11 }C_{ 3 } (0.07)^3 (0.93)^8 = \underline{0.0317} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Standard binomial probability.</div></div></li>
             <li><div class="w"><p>(b) Getting exactly 3 defective items in the 1st to 11th items, AND the 12th item is the 4th defective item.</p></div><div class="why"><div>Event decomposition based on the sequence of inspections.</div></div></li>
             <li><div class="w">\[\text{Required probability } = P(X=3) \times 0.07 \approx 0.031670 \times 0.07 = \underline{0.0022} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Multiply the probability from (a) by the independent probability of the 12th item being defective.</div></div></li>
           </ol>
@@ -746,10 +752,10 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <p class="pempty">Try it on paper first, then press Start ▶</p>
           <ol class="pwork">
             <li><div class="w"><p>(a) Exactly 3 sunny days from Mon to Fri, AND the 4th sunny day is on Sat, and 5th on Sun.</p><p>Let \(X\) be the number of sunny days among the first five days in a week, then \(X \sim B(5, 0.65)\).</p></div><div class="why"><div>If the 4th sunny day is after Friday, exactly 3 sunny days occur Mon–Fri, and both Sat and Sun must be sunny.</div></div></li>
-            <li><div class="w">\[\text{Required probability } = P(X=3) \times (0.65)^2 = C_3^5 (0.65)^3(0.35)^2 \times (0.65)^2 = \underline{0.1421} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Multiply the binomial probability for the 5 weekdays by the probability of 2 sunny weekend days.</div></div></li>
+            <li><div class="w">\[\text{Required probability } = P(X=3) \times (0.65)^2 = _{ 5 }C_{ 3 } (0.65)^3(0.35)^2 \times (0.65)^2 = \underline{0.1421} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Multiply the binomial probability for the 5 weekdays by the probability of 2 sunny weekend days.</div></div></li>
             <li><div class="w"><p>(b) Let \(W\) be the number of sunny days in a week, then \(W \sim B(7, 0.65)\).</p>\[P(\text{At least 5 sunny days in a week}) = P(W \ge 5) = P(W=5) + P(W=6) + P(W=7)\]</div><div class="why"><div>Define the distribution for the full week to find the denominator for the conditional probability.</div></div></li>
-            <li><div class="w">\[= C_5^7(0.65)^5(0.35)^2 + C_6^7(0.65)^6(0.35) + (0.65)^7 = 0.532283 \text{ (cor. to 6 d.p.)}\]</div><div class="why"><div>Calculate the total probability of the given condition.</div></div></li>
-            <li><div class="w">\[\text{Required probability } = \frac{P(X=3) \times (0.65)^2}{P(W \ge 5)}\]</div><div class="why"><div>Apply conditional formula \(P(A \mid B) = P(A \cap B)/P(B)\). The intersection is exactly the event from part (a).</div></div></li>
+            <li><div class="w">\[= _{ 7 }C_{ 5 }(0.65)^5(0.35)^2 + _{ 7 }C_{ 6 }(0.65)^6(0.35) + (0.65)^7 = 0.532283 \text{ (cor. to 6 d.p.)}\]</div><div class="why"><div>Calculate the total probability of the given condition.</div></div></li>
+            <li><div class="w">\[\text{Required probability } = \frac{P(X=3) \times (0.65)^2}{P(W \ge 5)}\]</div><div class="why"><div>Apply conditional formula \(P(A \mid B) = \frac{P(A \cap B)}{P(B)}\). The intersection is exactly the event from part (a).</div></div></li>
             <li><div class="w">\[\approx \frac{0.142136}{0.532283} = \underline{0.2670} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Use unrounded values for the final division.</div></div></li>
           </ol>
         </div>
@@ -765,6 +771,9 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
   <div class="head"><p class="eyebrow">Section 10.2</p><h1>Poisson Distribution <i>Po</i>(&lambda;)</h1></div>
 
   <div class="page" data-key="idea" data-label="Concepts">
+    <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 16px; border: 1px solid var(--line);">
+      <iframe src="https://www.youtube.com/embed/BbLfV0wOeyc" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+    </div>
     <p>Models the number of random, independent events in a continuous interval of time or region of space:</p>
     <div class="defn">
       <span class="lbl">Poisson Probability Function</span>
@@ -921,7 +930,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
     <div class="dtwrap"><table class="dt">
       <tr><th>Random variable \(X\)</th><th>Parameter(s)</th><th>Probability function of \(X\)</th><th>\(E(X)\)</th><th>\(\operatorname{Var}(X)\)</th></tr>
       <tr><td style="text-align:left"><strong>Bernoulli variable:</strong><br>It takes 1 for a 'success' and 0 for a 'failure' in a trial</td><td>\(p\): the probability of success in a trial</td><td>\(P(X=x) = p^x(1-p)^{1-x}\) for \(x=0, 1\)</td><td>\(p\)</td><td>\(p(1-p)\)</td></tr>
-      <tr><td style="text-align:left"><strong>Binomial variable:</strong><br>Number of successes in \(n\) identical and independent Bernoulli trials</td><td>\(p\): the probability of success in each trial<br>\(n\): the total number of trials</td><td>\(P(X=x) = C_x^n p^x(1-p)^{n-x}\) for \(x=0, 1, 2, \dots, n\)</td><td>\(np\)</td><td>\(np(1-p)\)</td></tr>
+      <tr><td style="text-align:left"><strong>Binomial variable:</strong><br>Number of successes in \(n\) identical and independent Bernoulli trials</td><td>\(p\): the probability of success in each trial<br>\(n\): the total number of trials</td><td>\(P(X=x) = _{ n }C_{ x } p^x(1-p)^{n-x}\) for \(x=0, 1, 2, \dots, n\)</td><td>\(np\)</td><td>\(np(1-p)\)</td></tr>
       <tr><td style="text-align:left"><strong>Poisson variable:</strong><br>Number of occurrences of an event in an interval of time or a region of space</td><td>\(\lambda\): the average number of occurrences of the event in a specified interval of time or region of space</td><td>\(P(X=x) = \frac{e^{-\lambda}\lambda^x}{x!}\) for \(x=0, 1, 2, \dots\)</td><td>\(\lambda\)</td><td>\(\lambda\)</td></tr>
     </table></div>
   </div>
@@ -945,10 +954,10 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <ol class="pwork">
             <li><div class="w"><p>(a) Let \(X\) be the number of calls received by Jay in a day, then \(X \sim Po(5.2)\).</p>\[\text{Required probability } = P(X > 3) = 1 - e^{-5.2} - \frac{e^{-5.2}(5.2)^1}{1!} - \frac{e^{-5.2}(5.2)^2}{2!} - \frac{e^{-5.2}(5.2)^3}{3!}\]\[= \underline{0.7619} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Standard Poisson complement calculation.</div></div></li>
             <li><div class="w"><p>(b) Let \(Y\) be the number of marketing calls received out of 6 calls, then \(Y \sim B(6, 0.6)\).</p>\[\text{Required probability } = P(X=6 \text{ and } Y=5) = P(X=6) \times P(Y=5)\]</div><div class="why"><div>Layer a Binomial trial on top of a Poisson volume.</div></div></li>
-            <li><div class="w">\[= \frac{e^{-5.2}(5.2)^6}{6!} \times C_5^6(0.6)^5(0.4) = \underline{0.0283} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Calculate the product of the two probabilities.</div></div></li>
+            <li><div class="w">\[= \frac{e^{-5.2}(5.2)^6}{6!} \times _{ 6 }C_{ 5 }(0.6)^5(0.4) = \underline{0.0283} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Calculate the product of the two probabilities.</div></div></li>
             <li><div class="w"><p>(c) If no calls are received by Jay, it is impossible for him to receive at least 1 marketing call. Thus, \(P(X=0 \text{ and at least 1 marketing call}) = 0\).</p><p>Let \(W_i\) be the number of marketing calls received out of \(i\) calls where \(i > 0\), then \(W_i \sim B(i, 0.6)\).</p></div><div class="why"><div>Condition on total calls \(X \in \{1, 2, 3\}\).</div></div></li>
             <li><div class="w"><p>Required probability</p>\[= P(X=1) \times P(W_1 \ge 1) + P(X=2) \times P(W_2 \ge 1) + P(X=3) \times P(W_3 \ge 1)\]</div><div class="why"><div>Sum the probabilities of these mutually exclusive pathways. Note \(P(W_1 \ge 1) = P(W_1 = 1) = 0.6\) and \(P(W_3 \ge 1) = 1 - P(W_3 = 0) = 1 - (0.4)^3\).</div></div></li>
-            <li><div class="w">\[= \frac{e^{-5.2}(5.2)^1}{1!} \times 0.6 + \frac{e^{-5.2}(5.2)^2}{2!} \times [C_1^2(0.6)(0.4) + (0.6)^2] + \frac{e^{-5.2}(5.2)^3}{3!} \times [1-(0.4)^3]\]\[= \underline{0.2009} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Calculate and sum the terms.</div></div></li>
+            <li><div class="w">\[= \frac{e^{-5.2}(5.2)^1}{1!} \times 0.6 + \frac{e^{-5.2}(5.2)^2}{2!} \times [_{ 2 }C_{ 1 }(0.6)(0.4) + (0.6)^2] + \frac{e^{-5.2}(5.2)^3}{3!} \times [1-(0.4)^3]\]\[= \underline{0.2009} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Calculate and sum the terms.</div></div></li>
           </ol>
         </div>
       </div>
@@ -975,17 +984,17 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <p class="pempty">Try it on paper first, then press Start ▶</p>
           <ol class="pwork">
             <li><div class="w"><p>(a) Let \(X\) be the number of road accidents occurring in a week, then \(X \sim Po(2)\).</p>\[\text{Required probability } = P(X=0) = e^{-2} = \underline{0.1353} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Weekly base rate calculation.</div></div></li>
-            <li><div class="w"><p>(b) Let \(Y\) be the number of weeks with no road accidents out of 5 weeks, then \(Y \sim B(5, e^{-2})\).</p>\[\text{Required probability } = P(Y=3) = C_3^5 (e^{-2})^3 (1-e^{-2})^2 = \underline{0.0185} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Treating each week as an independent trial, creating a binomial distribution. \(P(\text{No road accidents occurring in a week}) = P(X=0) = e^{-2}\).</div></div></li>
+            <li><div class="w"><p>(b) Let \(Y\) be the number of weeks with no road accidents out of 5 weeks, then \(Y \sim B(5, e^{-2})\).</p>\[\text{Required probability } = P(Y=3) = _{ 5 }C_{ 3 } (e^{-2})^3 (1-e^{-2})^2 = \underline{0.0185} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Treating each week as an independent trial, creating a binomial distribution. \(P(\text{No road accidents occurring in a week}) = P(X=0) = e^{-2}\).</div></div></li>
             <li><div class="w"><p>(c) Expected number of weeks with no road accidents out of 5 weeks</p>\[= E(Y) = 5(e^{-2}) = \underline{0.6767} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Use the expected value formula for the binomial distribution \(Y\).</div></div></li>
-            <li><div class="w"><p>(d) Required probability \(= P(Y=2) \times e^{-2}\)</p>\[= C_2^5 (e^{-2})^2 (1-e^{-2})^3 \times e^{-2} = \underline{0.0160} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>The 6th week must be accident-free, preceded by exactly 2 in the first 5.</div></div></li>
+            <li><div class="w"><p>(d) Required probability \(= P(Y=2) \times e^{-2}\)</p>\[= _{ 5 }C_{ 2 } (e^{-2})^2 (1-e^{-2})^3 \times e^{-2} = \underline{0.0160} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>The 6th week must be accident-free, preceded by exactly 2 in the first 5.</div></div></li>
             <li><div class="w"><p>(e) Possible number of road accidents per week (out of the 3 weeks with accidents):</p>
-              <p>Combination 1: 0, 0, 1, 1, 4 (Number of ways \(= C_2^5 C_2^3\))</p>
-              <p>Combination 2: 0, 0, 1, 2, 3 (Number of ways \(= C_2^5 C_1^3 C_1^2 = P_3^5\))</p>
-              <p>Combination 3: 0, 0, 2, 2, 2 (Number of ways \(= C_2^5\))</p>
-            </div><div class="why"><div>Partition 6 accidents into the 3 non-zero weeks. Note \(P_3^5 = \frac{5!}{(5-3)!}\).</div></div></li>
+              <p>Combination 1: 0, 0, 1, 1, 4 (Number of ways \(= _{ 5 }C_{ 2 } _{ 3 }C_{ 2 }\))</p>
+              <p>Combination 2: 0, 0, 1, 2, 3 (Number of ways \(= _{ 5 }C_{ 2 } _{ 3 }C_{ 1 } _{ 2 }C_{ 1 } = _{ 5 }P_{ 3 }\))</p>
+              <p>Combination 3: 0, 0, 2, 2, 2 (Number of ways \(= _{ 5 }C_{ 2 }\))</p>
+            </div><div class="why"><div>Partition 6 accidents into the 3 non-zero weeks. Note \(_{ 5 }P_{ 3 } = \frac{5!}{(5-3)!}\).</div></div></li>
             <li><div class="w"><p>Required probability \(= P(Y=2 \text{ and a total of 6 road accidents occur})\)</p>
-              \[= C_2^5 C_2^3 [P(X=0)]^2 [P(X=1)]^2 [P(X=4)] + P_3^5 [P(X=0)]^2 [P(X=1)][P(X=2)][P(X=3)] + C_2^5 [P(X=0)]^2 [P(X=2)]^3\]</div><div class="why"><div>Sum the probabilities for all possible combinations.</div></div></li>
-            <li><div class="w">\[= C_2^5 C_2^3 (e^{-2})^2 \left[\frac{e^{-2}2^1}{1!}\right]^2 \left(\frac{e^{-2}2^4}{4!}\right) + P_3^5 (e^{-2})^2 \left(\frac{e^{-2}2^1}{1!}\right) \left(\frac{e^{-2}2^2}{2!}\right) \left(\frac{e^{-2}2^3}{3!}\right) + C_2^5 (e^{-2})^2 \left[\frac{e^{-2}2^2}{2!}\right]^3\]\[= \underline{0.0218} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Substitute the Poisson probabilities and evaluate.</div></div></li>
+              \[= _{ 5 }C_{ 2 } _{ 3 }C_{ 2 } [P(X=0)]^2 [P(X=1)]^2 [P(X=4)] + _{ 5 }P_{ 3 } [P(X=0)]^2 [P(X=1)][P(X=2)][P(X=3)] + _{ 5 }C_{ 2 } [P(X=0)]^2 [P(X=2)]^3\]</div><div class="why"><div>Sum the probabilities for all possible combinations.</div></div></li>
+            <li><div class="w">\[= _{ 5 }C_{ 2 } _{ 3 }C_{ 2 } (e^{-2})^2 \left[\frac{e^{-2}2^1}{1!}\right]^2 \left(\frac{e^{-2}2^4}{4!}\right) + _{ 5 }P_{ 3 } (e^{-2})^2 \left(\frac{e^{-2}2^1}{1!}\right) \left(\frac{e^{-2}2^2}{2!}\right) \left(\frac{e^{-2}2^3}{3!}\right) + _{ 5 }C_{ 2 } (e^{-2})^2 \left[\frac{e^{-2}2^2}{2!}\right]^3\]\[= \underline{0.0218} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Substitute the Poisson probabilities and evaluate.</div></div></li>
           </ol>
         </div>
       </div>
