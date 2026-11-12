@@ -4,27 +4,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>HKDSE M1 Chapter 10: Discrete Probability Distributions</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%235f35cc'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial' font-size='30' font-weight='700' fill='white'%3E10%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <style>
 /* Core Tokens & Layout */
 :root{
-  --paper:#F3F5F9; --surface:#FFFFFF; --sunk:#E9EDF4; --ink:#15213A; --ink-2:#47546E; --ink-3:#7A869B; --line:#D5DBE6; --grid:rgba(55,85,150,.075);
-  --violet:#5F35CC; --violet-soft:#ECE6FC; --on-violet:#FFFFFF;
-  --amber:#AD6B00; --amber-soft:#FFF1D4;
-  --teal:#0A7C6F; --teal-soft:#D9F1EC;
-  --red:#BF372D; --red-soft:#FBE3E0;
+  /* Primitive palette → semantic surfaces, text and learning states */
+  --paper:oklch(0.972 0.007 250); --surface:oklch(0.995 0.002 250); --sunk:oklch(0.94 0.012 250);
+  --ink:oklch(0.27 0.04 255); --ink-2:oklch(0.43 0.035 255); --ink-3:oklch(0.49 0.025 255); --line:oklch(0.88 0.014 250); --grid:color-mix(in oklab,var(--ink) 6%,transparent);
+  --violet:oklch(0.47 0.19 285); --violet-soft:oklch(0.935 0.035 285); --on-violet:oklch(0.985 0.005 285);
+  --amber:oklch(0.52 0.12 70); --amber-soft:oklch(0.94 0.055 85);
+  --teal:oklch(0.48 0.10 175); --teal-soft:oklch(0.92 0.04 175);
+  --red:oklch(0.52 0.17 30); --red-soft:oklch(0.93 0.035 30);
+  --shadow-sm:0 1px 2px color-mix(in oklab,var(--ink) 5%,transparent),0 8px 24px color-mix(in oklab,var(--ink) 4%,transparent);
+  --shadow-lg:0 16px 48px color-mix(in oklab,var(--ink) 10%,transparent);
   --font-display:'Archivo','Arial Narrow',system-ui,sans-serif;
   --font-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root{
-  --paper:#0D131E; --surface:#151D2C; --sunk:#1C2638; --ink:#E6EAF2; --ink-2:#AAB4C7; --ink-3:#77839A; --line:#2A3549; --grid:rgba(150,175,230,.05);
-  --violet:#A88CFF; --violet-soft:#272050; --on-violet:#140C2E;
-  --amber:#F0B44A; --amber-soft:#3A2D12;
-  --teal:#44C6B3; --teal-soft:#113430;
-  --red:#F27E74; --red-soft:#401F1C;
+  --paper:oklch(0.18 0.02 255); --surface:oklch(0.23 0.025 255); --sunk:oklch(0.27 0.025 255);
+  --ink:oklch(0.93 0.015 255); --ink-2:oklch(0.78 0.025 255); --ink-3:oklch(0.70 0.025 255); --line:oklch(0.34 0.025 255); --grid:color-mix(in oklab,var(--ink) 5%,transparent);
+  --violet:oklch(0.75 0.13 285); --violet-soft:oklch(0.31 0.07 285); --on-violet:oklch(0.22 0.06 285);
+  --amber:oklch(0.79 0.13 80); --amber-soft:oklch(0.32 0.055 75);
+  --teal:oklch(0.75 0.11 175); --teal-soft:oklch(0.30 0.045 175);
+  --red:oklch(0.72 0.15 30); --red-soft:oklch(0.31 0.06 30);
   color-scheme:dark}}
 
 *{box-sizing:border-box}
@@ -123,7 +130,8 @@ input[type=range]{width:100%;accent-color:var(--violet)}
 .dt th,.dt td{border:1px solid var(--line);padding:6px 11px;text-align:center;min-width:48px}
 .dt th{font-family:var(--font-mono);font-weight:500;font-size:.8rem;background:var(--sunk);color:var(--ink-2);white-space:nowrap}
 .dtwrap{overflow-x:auto;max-width:100%}
-mjx-container[display="true"]{margin:.35em 0 !important}
+mjx-container{max-width:100%;overflow-x:auto;overflow-y:hidden}
+mjx-container[display="true"]{display:block;width:100%;margin:.35em 0 !important}
 
 /* Interactive Step Players */
 .player{display:flex;flex-direction:column;gap:12px}
@@ -195,13 +203,102 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
 .guide-card h4{margin:0 0 4px;font-size:.92rem;color:var(--violet)}
 .guide-card p{margin:0}
 
+/* Refined learning workspace */
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{min-height:100dvh;padding:24px max(24px,env(safe-area-inset-right,0px)) 48px max(24px,env(safe-area-inset-left,0px));-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.app{grid-template-columns:264px minmax(0,1fr);gap:40px;max-width:1360px}
+.rail{min-width:0;top:24px;max-height:calc(100dvh - 48px);border-radius:18px;padding:20px 12px 16px;box-shadow:var(--shadow-sm);scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.brand{padding:0 8px 18px;margin-bottom:12px;gap:8px}
+.brand h2{font-size:1.3rem;letter-spacing:-.025em}
+.brand .eyebrow{font-size:.7rem}
+.prog{margin-top:8px;gap:12px}
+.prog .track{height:7px;border-radius:999px}
+.prog .fill{transition:width .25s ease-out}
+.nav{min-width:0}
+.nav a{min-height:44px;padding:10px 8px;transition:background .18s ease-out,color .18s ease-out,transform .18s ease-out}
+.nav a:hover{transform:translateX(2px)}
+.nav a[aria-current="page"]{box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--violet) 12%,transparent)}
+.nav a[aria-current="page"]:hover{transform:none}
+main{display:flex;flex-direction:column;gap:20px}
+.mainbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:2px 2px 16px;border-bottom:1px solid var(--line);min-height:54px}
+.mainbar-title{display:flex;align-items:baseline;gap:10px;min-width:0}
+.mainbar-label{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+#currentLocation{font-family:var(--font-display);font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.save-state{display:inline-flex;align-items:center;gap:7px;color:var(--ink-2);font-size:.76rem;white-space:nowrap}
+.save-state svg{width:16px;height:16px;color:var(--teal);flex:none}
+.view{max-width:980px;gap:22px;padding-block:4px 32px}
+.page{gap:18px}
+.head{gap:8px;padding:10px 0 2px}
+h1{font-size:clamp(2rem,3.8vw,2.75rem);letter-spacing:-.04em;text-wrap:balance}
+h2{letter-spacing:-.02em}
+.lead{font-size:1.1rem;line-height:1.65}
+.chapter-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chapter-meta span{display:inline-flex;align-items:center;min-height:30px;padding:4px 10px;border:1px solid var(--line);border-radius:999px;background:color-mix(in oklab,var(--surface) 70%,transparent);color:var(--ink-2);font-family:var(--font-mono);font-size:.72rem}
+.subnav{gap:8px;padding:2px 0 14px}
+.sp{min-height:36px;padding:6px 12px 6px 6px;transition:background .18s ease-out,border-color .18s ease-out,color .18s ease-out}
+.sp:hover{border-color:var(--ink-3);color:var(--ink)}
+.lab,.pq,.pviz,.qcard{border-radius:16px;box-shadow:var(--shadow-sm)}
+.lab,.pq{padding:20px}
+.pviz{padding:16px}
+.defn{padding:18px 20px;border:1px solid color-mix(in oklab,var(--violet) 12%,transparent)}
+.qcard{padding:18px}
+.video-container{background:var(--sunk);box-shadow:var(--shadow-sm)}
+.btn{min-height:40px;padding:.55em 1em;border-radius:10px;transition:background .18s ease-out,border-color .18s ease-out,color .18s ease-out,transform .18s ease-out,opacity .18s ease-out}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn.primary:hover{filter:none;background:color-mix(in oklab,var(--violet) 90%,var(--ink))}
+.btn[aria-pressed="true"]{background:var(--violet-soft);border-color:var(--violet);color:var(--ink)}
+.btn.primary[aria-pressed="true"]{background:var(--violet);color:var(--on-violet)}
+:where(a,button,input,textarea,summary):focus-visible{outline:3px solid color-mix(in oklab,var(--violet) 65%,var(--surface));outline-offset:3px}
+details.note{box-shadow:var(--shadow-sm)}
+details.note>summary{min-height:48px}
+input[type=range]{min-height:44px;cursor:pointer}
+.qin input{min-height:44px}
+textarea{line-height:1.6}
+textarea:focus,.qin input:focus{border-color:var(--violet)}
+.dt th,.dt td{padding:9px 12px}
+.pwork .w{border-left-width:1px}
+.pwork>li{transition:max-height .3s ease,opacity .22s ease-out,margin .22s ease-out}
+.pwork .why{transition:max-height .3s ease,opacity .22s ease-out,margin .22s ease-out}
+.pctl{background:color-mix(in oklab,var(--surface) 94%,transparent);box-shadow:var(--shadow-lg);backdrop-filter:blur(12px)}
+.dots{margin-inline:auto}
+
 @media (max-width:900px){
+  body{padding:16px max(16px,env(safe-area-inset-right,0px)) 32px max(16px,env(safe-area-inset-left,0px))}
   .app{grid-template-columns:minmax(0,1fr);gap:16px}
-  .rail{position:static;max-height:none;border-radius:12px;padding:10px 8px 8px}
-  .brand{flex-direction:row;align-items:center;justify-content:space-between;gap:12px;padding:0 6px 8px;margin-bottom:6px}
+  .rail{position:static;max-height:none;border-radius:14px;padding:12px 8px 10px}
+  .brand{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding:0 6px 10px;margin-bottom:8px}
+  .brand h2{font-size:1.08rem}
   .brand .eyebrow{display:none}
-  .nav ol{flex-direction:row;overflow-x:auto;gap:4px;padding-bottom:4px}
-  .nav a{white-space:nowrap;grid-template-columns:auto auto auto;gap:6px;padding:6px 9px}
+  .prog{margin-top:0;min-width:120px;flex:0 1 160px}
+  .nav ol{flex-direction:row;overflow-x:auto;gap:6px;padding:2px 2px 6px;scroll-snap-type:x proximity}
+  .nav li{flex:none;scroll-snap-align:start}
+  .nav a{white-space:nowrap;grid-template-columns:auto auto auto;gap:6px;padding:8px 10px;min-height:44px}
+  .nav a:hover{transform:none}
+  .mainbar{min-height:48px;padding-bottom:12px}
+  .view{padding-bottom:24px}
+  .subnav{flex-wrap:nowrap;overflow-x:auto;padding:2px 2px 12px;scrollbar-width:thin}
+  .sp{flex:none;min-height:44px}
+  .pviz{position:static}
+  .chapter-meta span{min-height:32px}
+}
+@media (max-width:600px){
+  .head{padding-top:4px}
+  h1{font-size:clamp(1.8rem,8vw,2.15rem)}
+  .lead{font-size:1rem}
+  .mainbar-label{display:none}
+  .save-state{font-size:.7rem}
+  .lab,.pq,.qcard{padding:16px}
+  .defn{padding:16px}
+  .page-foot{align-items:stretch}
+  .page-foot .btn{flex:1 1 auto;min-height:44px}
+  .pctl{bottom:calc(8px + env(safe-area-inset-bottom,0px))}
+  .dots{order:3;width:100%;justify-content:center;padding-top:2px}
+  details.note>.body{padding-left:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
 }
 </style>
 </head>
@@ -212,12 +309,16 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
   <div class="brand">
     <p class="eyebrow">HKDSE M1 · Chapter 10</p>
     <h2>Discrete Distributions</h2>
-    <div class="prog"><div class="track"><div class="fill" id="progFill"></div></div><span id="progTxt">0/5</span></div>
+    <div class="prog"><div class="track" id="progTrack" role="progressbar" aria-label="Section checks completed" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"><div class="fill" id="progFill"></div></div><span id="progTxt">0/4</span></div>
   </div>
-  <nav class="nav"><ol id="navList"></ol></nav>
+  <nav class="nav" aria-label="Chapter navigation"><ol id="navList"></ol></nav>
 </aside>
 
-<main>
+<main id="mainContent">
+  <div class="mainbar" aria-live="polite">
+    <div class="mainbar-title"><span class="mainbar-label">Now viewing</span><strong id="currentLocation">Start here · Start</strong></div>
+    <span class="save-state"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="m5 10 3 3 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Progress saved on this device</span>
+  </div>
 
 <!-- ===================== START & REVIEW ===================== -->
 <section class="view" id="v-start" data-title="Start here">
@@ -226,6 +327,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
       <p class="eyebrow">Pre-lesson & Chapter Guide</p>
       <h1>Discrete Probability Distributions</h1>
       <p class="lead">From individual trials to continuous intervals: Master the <strong>Bernoulli</strong>, <strong>Binomial</strong>, and <strong>Poisson</strong> models across all 16 textbook examples.</p>
+      <div class="chapter-meta" aria-label="Chapter overview"><span>3 core models</span><span>16 worked examples</span><span>4 section checks</span></div>
     </div>
     <div class="lab">
       <div class="svgwrap">
@@ -294,7 +396,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
 
   <div class="page" data-key="idea" data-label="Concepts">
     <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 16px; border: 1px solid var(--line);">
-      <iframe src="https://www.youtube.com/embed/nl9WiZMZnYs" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+      <iframe loading="lazy" title="Chapter 10 lesson video" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/nl9WiZMZnYs" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
     </div>
     <p>A <span class="term">Bernoulli trial</span> is an experiment with exactly two outcomes: <em>success</em> (\(X=1\)) with probability \(p\), and <em>failure</em> (\(X=0\)) with probability \(1-p\).</p>
     <div class="defn">
@@ -402,7 +504,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
 
   <div class="page" data-key="idea" data-label="Concepts">
     <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 16px; border: 1px solid var(--line);">
-      <iframe src="https://www.youtube.com/embed/_FbZI9mtSSM" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+      <iframe loading="lazy" title="Chapter 10 lesson video" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/_FbZI9mtSSM" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
     </div>
     <p>When a Bernoulli trial with success probability \(p\) is repeated \(n\) times <strong>independently</strong>, the number of successes \(X\) is a binomial variable:</p>
     <div class="defn">
@@ -443,7 +545,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
         <div class="guide-card" style="background:var(--amber-soft);border-color:var(--amber)">
           <h4 style="color:var(--amber)">Conclusion of Exploration:</h4>
           <p>• When \(p = 0.5\), the binomial distribution is <strong>symmetrical</strong>.</p>
-          <p>• When \(p < 0.5\), the distribution is <strong>skewed to the right</strong>.</p>
+          <p>• When \(p &lt; 0.5\), the distribution is <strong>skewed to the right</strong>.</p>
           <p>• When \(p > 0.5\), the distribution is <strong>skewed to the left</strong>.</p>
           <p>• As \(n\) increases, the distribution becomes more symmetrical and bell-shaped.</p>
         </div>
@@ -497,11 +599,11 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
     <div class="player" data-viz="ex104">
       <div class="pq">
         <div class="qh"><span class="tag amber">Example 10.4</span><h3>Find the parameter and unknown constant from a given binomial distribution</h3></div>
-        <p>It is given that a random variable \(X \sim B(4, p)\) where \(0 < p < 0.5\) and \(\operatorname{Var}(X) = \frac{8}{9}\).</p>
+        <p>It is given that a random variable \(X \sim B(4, p)\) where \(0 &lt; p &lt; 0.5\) and \(\operatorname{Var}(X) = \frac{8}{9}\).</p>
         <ol class="parts">
           <li><b>(a)</b><span>Find the value of \(p\).</span></li>
           <li><b>(b)</b><span>Find \(E(X)\).</span></li>
-          <li><b>(c)</b><span>It is given that \(k\) is an integer. Find the greatest value of \(k\) such that \(P(X < k) < 0.9\).</span></li>
+          <li><b>(c)</b><span>It is given that \(k\) is an integer. Find the greatest value of \(k\) such that \(P(X &lt; k) &lt; 0.9\).</span></li>
         </ol>
       </div>
       <div class="pmain">
@@ -511,11 +613,11 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <ol class="pwork">
             <li><div class="w">\[\text{(a)}\quad \operatorname{Var}(X) = \frac{8}{9}\]\[4p(1-p) = \frac{8}{9}\]</div><div class="why"><div>Substitute \(n=4\) and variance into the formula \(\operatorname{Var}(X) = np(1-p)\).</div></div></li>
             <li><div class="w">\[9p^2 - 9p + 2 = 0 \implies (3p-1)(3p-2) = 0\]</div><div class="why"><div>Expand into standard quadratic form.</div></div></li>
-            <li><div class="w">\[p = \underline{\frac{1}{3}} \quad\text{or}\quad \frac{2}{3} \text{ (rejected)}\]</div><div class="why"><div>Always test constraints explicitly. Reject \(\frac{2}{3}\) since \(0 < p < 0.5\).</div></div></li>
+            <li><div class="w">\[p = \underline{\frac{1}{3}} \quad\text{or}\quad \frac{2}{3} \text{ (rejected)}\]</div><div class="why"><div>Always test constraints explicitly. Reject \(\frac{2}{3}\) since \(0 &lt; p &lt; 0.5\).</div></div></li>
             <li><div class="w">\[\text{(b)}\quad E(X) = np = 4\left(\frac{1}{3}\right) = \underline{\frac{4}{3}}\]</div><div class="why"><div>Substitute \(n\) and \(p\) into the expected value formula.</div></div></li>
-            <li><div class="w">\[\text{(c)}\quad P(X < 4) = 1 - P(X=4) = 1 - \left(\frac{1}{3}\right)^4 = 0.9877 \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Calculate cumulative probabilities downwards from the maximum value \(n=4\).</div></div></li>
-            <li><div class="w">\[P(X < 3) = 1 - P(X=4) - P(X=3)\]\[= 1 - \left(\frac{1}{3}\right)^4 - _{ 4 }C_{ 3 }\left(\frac{1}{3}\right)^3\left(\frac{2}{3}\right) = 0.8889 \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Check the next integer down.</div></div></li>
-            <li><div class="w"><p>\(P(X < 3) < 0.9\) and \(P(X < 4) > 0.9\).</p><p>The greatest value of \(k\) is <u>3</u>.</p></div><div class="why"><div>\(k=3\) is the highest integer satisfying the strict inequality \(< 0.9\).</div></div></li>
+            <li><div class="w">\[\text{(c)}\quad P(X &lt; 4) = 1 - P(X=4) = 1 - \left(\frac{1}{3}\right)^4 = 0.9877 \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Calculate cumulative probabilities downwards from the maximum value \(n=4\).</div></div></li>
+            <li><div class="w">\[P(X &lt; 3) = 1 - P(X=4) - P(X=3)\]\[= 1 - \left(\frac{1}{3}\right)^4 - _{ 4 }C_{ 3 }\left(\frac{1}{3}\right)^3\left(\frac{2}{3}\right) = 0.8889 \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Check the next integer down.</div></div></li>
+            <li><div class="w"><p>\(P(X &lt; 3) &lt; 0.9\) and \(P(X &lt; 4) > 0.9\).</p><p>The greatest value of \(k\) is <u>3</u>.</p></div><div class="why"><div>\(k=3\) is the highest integer satisfying the strict inequality \(&lt; 0.9\).</div></div></li>
           </ol>
         </div>
       </div>
@@ -542,7 +644,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
             <li><div class="w"><p>There are 7 identical and independent Bernoulli trials (i.e. the 7 days in a summer week). \(X\) is the number of successes (i.e. rainy days) in these 7 trials.</p><p>\(\therefore X\) follows a binomial distribution. \(X \sim B\left(7, \frac{3}{5}\right)\)</p></div><div class="why"><div>Establish the parameters first. The trials (days) are independent.</div></div></li>
             <li><div class="w">\[\text{(a)}\quad \text{The probability distribution of } X \text{ is }\]\[P(X=x) = _{ 7 }C_{ x } \left(\frac{3}{5}\right)^x \left(\frac{2}{5}\right)^{7-x} \quad \text{for } x=0, 1, 2, \dots, 7.\]</div><div class="why"><div>Substitute \(n=7\), \(p=\frac{3}{5}\), and \(1-p = \frac{2}{5}\) into the binomial probability function.</div></div></li>
             <li><div class="w">\[\text{(b)(i)}\quad P(\text{Exactly 3 rainy days}) = P(X=3) = _{ 7 }C_{ 3 } \left(\frac{3}{5}\right)^3 \left(\frac{2}{5}\right)^4 = \underline{0.1935} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Substitute \(x=3\) directly.</div></div></li>
-            <li><div class="w">\[\text{(ii)}\quad P(\text{Less than 2 rainy days}) = P(X < 2) = P(X=0) + P(X=1)\]\[= \left(\frac{2}{5}\right)^7 + _{ 7 }C_{ 1 }\left(\frac{3}{5}\right)\left(\frac{2}{5}\right)^6 = \underline{0.0188} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>"Less than 2" means strictly less than 2, so \(x=0\) and \(x=1\).</div></div></li>
+            <li><div class="w">\[\text{(ii)}\quad P(\text{Less than 2 rainy days}) = P(X &lt; 2) = P(X=0) + P(X=1)\]\[= \left(\frac{2}{5}\right)^7 + _{ 7 }C_{ 1 }\left(\frac{3}{5}\right)\left(\frac{2}{5}\right)^6 = \underline{0.0188} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>"Less than 2" means strictly less than 2, so \(x=0\) and \(x=1\).</div></div></li>
             <li><div class="w">\[\text{(iii)}\quad P(\text{At most 5 rainy days}) = P(X \le 5) = 1 - P(X=6) - P(X=7)\]\[= 1 - _{ 7 }C_{ 6 }\left(\frac{3}{5}\right)^6\left(\frac{2}{5}\right) - \left(\frac{3}{5}\right)^7 = \underline{0.8414} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Evaluating two complement terms is much faster than summing six terms (\(x=0\) to \(5\)).</div></div></li>
             <li><div class="w">\[\text{(c)}\quad \text{Mean of the number of rainy days } = E(X) = 7\left(\frac{3}{5}\right) = \underline{\frac{21}{5}}\]\[\text{Variance of the number of rainy days } = \operatorname{Var}(X) = 7\left(\frac{3}{5}\right)\left(\frac{2}{5}\right) = \underline{\frac{42}{25}}\]</div><div class="why"><div>Apply \(E(X) = np\) and \(\operatorname{Var}(X) = np(1-p)\). Keep exact fractions.</div></div></li>
           </ol>
@@ -697,9 +799,9 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <p class="pempty">Try it on paper first, then press Start ▶</p>
           <ol class="pwork">
             <li><div class="w"><p>(a) Let \(X\) be the number of '6's obtained, then \(X \sim B\left(n, \frac{1}{9}\right)\).</p>\[P(X \ge 1) > 0.9 \implies 1 - P(X=0) > 0.9\]</div><div class="why"><div>Set up the inequality based on the question. "At least one" is the complement of "none".</div></div></li>
-            <li><div class="w">\[1 - \left(\frac{8}{9}\right)^n > 0.9 \implies \left(\frac{8}{9}\right)^n < 0.1\]</div><div class="why"><div>Substitute \(P(X=0)\). Then isolate the term with \(n\).</div></div></li>
-            <li><div class="w">\[n \log\left(\frac{8}{9}\right) < \log 0.1\]</div><div class="why"><div>Take the logarithm of both sides. Bring down the exponent \(n\).</div></div></li>
-            <li><div class="w">\[n > \frac{\log 0.1}{\log\left(\frac{8}{9}\right)}\]\[n > 19.55 \text{ (cor. to 2 d.p.)}\]</div><div class="why"><div>Since \(\log\left(\frac{8}{9}\right) < 0\), the inequality sign <strong>must flip</strong> when you divide by it.</div></div></li>
+            <li><div class="w">\[1 - \left(\frac{8}{9}\right)^n > 0.9 \implies \left(\frac{8}{9}\right)^n &lt; 0.1\]</div><div class="why"><div>Substitute \(P(X=0)\). Then isolate the term with \(n\).</div></div></li>
+            <li><div class="w">\[n \log\left(\frac{8}{9}\right) &lt; \log 0.1\]</div><div class="why"><div>Take the logarithm of both sides. Bring down the exponent \(n\).</div></div></li>
+            <li><div class="w">\[n > \frac{\log 0.1}{\log\left(\frac{8}{9}\right)}\]\[n > 19.55 \text{ (cor. to 2 d.p.)}\]</div><div class="why"><div>Since \(\log\left(\frac{8}{9}\right) &lt; 0\), the inequality sign <strong>must flip</strong> when you divide by it.</div></div></li>
             <li><div class="w"><p>The least value of \(n\) is <u>20</u>.</p></div><div class="why"><div>Since \(n\) must be an integer, take the next whole number above 19.55.</div></div></li>
             <li><div class="w"><p>(b) Required probability = \(P(X \le 2)\)</p>\[= P(X=0) + P(X=1) + P(X=2)\]</div><div class="why"><div>Using \(X \sim B\left(20, \frac{1}{9}\right)\).</div></div></li>
             <li><div class="w">\[= \left(\frac{8}{9}\right)^{20} + _{ 20 }C_{ 1 }\left(\frac{1}{9}\right)\left(\frac{8}{9}\right)^{19} + _{ 20 }C_{ 2 }\left(\frac{1}{9}\right)^2\left(\frac{8}{9}\right)^{18} = \underline{0.6134} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Sum terms for \(x=0, 1, 2\).</div></div></li>
@@ -772,7 +874,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
 
   <div class="page" data-key="idea" data-label="Concepts">
     <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-bottom: 16px; border: 1px solid var(--line);">
-      <iframe src="https://www.youtube.com/embed/BbLfV0wOeyc" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
+      <iframe loading="lazy" title="Chapter 10 lesson video" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/BbLfV0wOeyc" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" allowfullscreen></iframe>
     </div>
     <p>Models the number of random, independent events in a continuous interval of time or region of space:</p>
     <div class="defn">
@@ -798,13 +900,13 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           
           <!-- Sample car arrival points -->
           <circle cx="110" cy="60" r="6" fill="var(--violet)"/>
-          <text x="110" y="45" class="lbl-s" text-anchor="middle">🚗 Car 1</text>
+          <text x="110" y="45" class="lbl-s" text-anchor="middle">Car 1</text>
           
           <circle cx="280" cy="60" r="6" fill="var(--violet)"/>
-          <text x="280" y="45" class="lbl-s" text-anchor="middle">🚗 Car 2</text>
+          <text x="280" y="45" class="lbl-s" text-anchor="middle">Car 2</text>
           
           <circle cx="390" cy="60" r="6" fill="var(--violet)"/>
-          <text x="390" y="45" class="lbl-s" text-anchor="middle">🚗 Car 3</text>
+          <text x="390" y="45" class="lbl-s" text-anchor="middle">Car 3</text>
           
           <text x="250" y="115" class="lbl-s" text-anchor="middle" fill="var(--teal)">Average Rate: λ = 3 cars / minute</text>
         </svg>
@@ -842,7 +944,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
         <p>It is given that a random variable \(X \sim Po(4.5)\). Find</p>
         <ol class="parts">
           <li><b>(a)</b><span>\(P(X = 7)\),</span></li>
-          <li><b>(b)</b><span>\(P(X < 2)\),</span></li>
+          <li><b>(b)</b><span>\(P(X &lt; 2)\),</span></li>
           <li><b>(c)</b><span>\(E(X)\) and \(\operatorname{Var}(X)\)<br>(Give your answers correct to 4 decimal places if necessary.)</span></li>
         </ol>
       </div>
@@ -853,7 +955,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
           <ol class="pwork">
             <li><div class="w"><p>\(X \sim Po(4.5) \implies P(X=x) = \frac{e^{-4.5}(4.5)^x}{x!}\) for \(x = 0, 1, 2, \dots\)</p></div><div class="why"><div>Identify the probability function with \(\lambda = 4.5\).</div></div></li>
             <li><div class="w">\[\text{(a)}\quad P(X=7) = \frac{e^{-4.5}(4.5)^7}{7!} = \underline{0.0824} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Substitute \(x = 7\) into the Poisson formula.</div></div></li>
-            <li><div class="w">\[\text{(b)}\quad P(X < 2) = P(X=0) + P(X=1) = \frac{e^{-4.5}(4.5)^0}{0!} + \frac{e^{-4.5}(4.5)^1}{1!} = \underline{0.0611} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Strict inequality \(< 2\) includes only \(x=0\) and \(x=1\). Note that \(0! = 1\).</div></div></li>
+            <li><div class="w">\[\text{(b)}\quad P(X &lt; 2) = P(X=0) + P(X=1) = \frac{e^{-4.5}(4.5)^0}{0!} + \frac{e^{-4.5}(4.5)^1}{1!} = \underline{0.0611} \text{ (cor. to 4 d.p.)}\]</div><div class="why"><div>Strict inequality \(&lt; 2\) includes only \(x=0\) and \(x=1\). Note that \(0! = 1\).</div></div></li>
             <li><div class="w">\[\text{(c)}\quad E(X) = \lambda = \underline{4.5}\]\[\operatorname{Var}(X) = \lambda = \underline{4.5}\]</div><div class="why"><div>In a Poisson distribution, both mean and variance equal the parameter \(\lambda\).</div></div></li>
           </ol>
         </div>
@@ -1018,7 +1120,7 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
       <div class="defn">
         <span class="lbl">Exam Traps to Avoid</span>
         <p>• Always write "(rejected)" when discarding an invalid \(p\).</p>
-        <p>• Flip inequality when dividing by \(\log(p)\) since \(\log(p)<0\).</p>
+        <p>• Flip inequality when dividing by \(\log(p)\) since \(\log(p)&lt;0\).</p>
         <p>• Adjust \(\lambda\) proportionally to match time intervals.</p>
       </div>
     </div>
@@ -1038,7 +1140,10 @@ textarea{width:100%;min-height:120px;font:inherit;padding:10px 12px;border:1px s
 window.MathJax = {
   tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
   svg: { fontCache: 'global' },
-  startup: { typeset: false }
+  startup: {
+    typeset: false,
+    pageReady: () => MathJax.startup.defaultPageReady().then(() => document.dispatchEvent(new Event('mathjax-ready')))
+  }
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
@@ -1088,6 +1193,7 @@ function refreshProgress(){
   const n=CHECK_SECS.filter(id=>done.has(id)).length;
   $('#progFill').style.width=(n/CHECK_SECS.length*100)+'%';
   $('#progTxt').textContent=n+'/'+CHECK_SECS.length;
+  $('#progTrack').setAttribute('aria-valuenow',n);
   $$('a[data-sec]').forEach(a=>a.classList.toggle('done',done.has(a.dataset.sec)));
   $$('.sp').forEach(b=>b.classList.toggle('seen',seen.has(b.dataset.sec+'|'+b.dataset.page)));
   store.set('m1c10-seen',[...seen]);store.set('m1c10-done',[...done]);
@@ -1111,7 +1217,12 @@ function show(secId,pageKey){
   $$('.nav a').forEach(a=>a.setAttribute('aria-current',a.dataset.sec===s.id?'page':'false'));
   seen.add(s.id+'|'+p.dataset.key);
   if(s.id==='summary'||s.id==='start')done.add(s.id);
-  
+
+  $('#currentLocation').textContent=s.title+' · '+p.dataset.label;
+  document.title=s.id==='start'&&p.dataset.key==='home'?'HKDSE M1 Chapter 10: Discrete Probability Distributions':p.dataset.label+' · '+s.title+' | HKDSE M1 Chapter 10';
+  history.replaceState(null,'','#'+s.id+'-'+p.dataset.key);
+  window.scrollTo({top:0,behavior:'auto'});
+
   // Typeset both header and page
   typeset(s.el.querySelector('.head'));
   typeset(p);
@@ -1128,11 +1239,17 @@ function show(secId,pageKey){
     mc: { title: 'Guess 4-choice question', succ: 'Correct', fail: 'Incorrect', p: 0.25 }
   };
   let trials = 0, succs = 0, fails = 0;
+  const expButtons={coin:$('#btnExpCoin'),target:$('#btnExpTarget'),qc:$('#btnExpQC'),mc:$('#btnExpMC')};
 
   function setExp(key){
     currentExp = key;
     $('#simExpTitle').textContent = exps[key].title;
     $('#simExpResult').textContent = `Success = ${exps[key].succ} | Failure = ${exps[key].fail}`;
+    Object.entries(expButtons).forEach(([name,btn])=>{
+      const selected=name===key;
+      btn.setAttribute('aria-pressed',selected?'true':'false');
+      btn.classList.toggle('primary',selected);
+    });
     trials = 0; succs = 0; fails = 0;
     updTally();
   }
@@ -1141,10 +1258,7 @@ function show(secId,pageKey){
     $('#simTally').textContent = `Trials: ${trials} | Successes (X = 1): ${succs} | Failures (X = 0): ${fails}`;
   }
 
-  $('#btnExpCoin').onclick = () => setExp('coin');
-  $('#btnExpTarget').onclick = () => setExp('target');
-  $('#btnExpQC').onclick = () => setExp('qc');
-  $('#btnExpMC').onclick = () => setExp('mc');
+  Object.entries(expButtons).forEach(([key,btn])=>btn.onclick=()=>setExp(key));
 
   $('#btnRunTrial').onclick = () => {
     trials++;
@@ -1154,6 +1268,7 @@ function show(secId,pageKey){
     $('#simExpResult').textContent = resText;
     updTally();
   };
+  setExp('coin');
 })();
 
 /* Binomial Dynamic Chart & Preset Buttons */
@@ -1209,7 +1324,7 @@ function genericViz(svg,title,meta){
   return (i)=>{ if(i>=0) g.classList.add('in'); else g.classList.remove('in'); };
 }
 
-VIZ.ex101=(svg)=>genericViz(svg,"13 Spades in 52 Cards",{bars:[{h:90,lbl:'X=0 (3/4)'},{h:30,lbl:'X=1 (1/4)',cls:'bar-a'}]});
+VIZ.ex101=(svg)=>genericViz(svg,"13 Spades in 52 Cards",{bars:[{h:90,lbl:'X=0'},{h:30,lbl:'X=1',cls:'bar-a'}]});
 VIZ.ex102=(svg)=>genericViz(svg,"Bernoulli: 0.27 + k = 1",{bars:[{h:35,lbl:'0.27'},{h:95,lbl:'k = 0.73',cls:'bar-t'}]});
 VIZ.ex103=(svg)=>genericViz(svg,"B(4, 0.6)",{bars:[{h:15,lbl:'0'},{h:45,lbl:'1'},{h:100,lbl:'2'},{h:100,lbl:'3'},{h:40,lbl:'4'}]});
 VIZ.ex104=(svg)=>genericViz(svg,"Quadratic: p = 1/3 or 2/3",{bars:[{h:33,lbl:'p = 1/3',cls:'bar-t'},{h:66,lbl:'2/3 (rej)',cls:'bar-r'}]});
@@ -1306,14 +1421,15 @@ function renderCheck(sec){
   const Q=CHECKS[sec],st=cstate[sec]||{};
   let h='<div class="head"><h2>Check Yourself</h2><p class="muted small">Test your core concepts for this section.</p></div>';
   h+=Q.map((q,i)=>{
-    const s=st[i];let body='';
-    if(q.t==='mcq')body='<div class="qopts">'+q.o.map((o,k)=>`<button class="btn qopt ${s?(k===q.a?'right':(k===s.ans?'wrong':'')):''}" data-cq="${sec}|${i}" data-k="${k}" ${s?'disabled':''}>${String.fromCharCode(65+k)}. ${o}</button>`).join('')+'</div>';
-    else body=`<div class="qin"><input id="ci-${sec}-${i}" value="${s?s.ans:''}" ${s?'disabled':''}><button class="btn primary" data-cq="${sec}|${i}" data-check="1" ${s?'disabled':''}>Check</button></div>`;
-    const fb=s?`<div class="qfb ${s.ok?'ok':'no'}"><strong>${s.ok?'Correct!':'Incorrect.'}</strong> ${q.e}</div>`:'';
+    const s=st[i],locked=s&&!s.error;let body='';
+    if(q.t==='mcq')body='<div class="qopts">'+q.o.map((o,k)=>`<button class="btn qopt ${s?(k===q.a?'right':(k===s.ans?'wrong':'')):''}" data-cq="${sec}|${i}" data-k="${k}" ${locked?'disabled':''}>${String.fromCharCode(65+k)}. ${o}</button>`).join('')+'</div>';
+    else body=`<div class="qin"><input id="ci-${sec}-${i}" inputmode="decimal" autocomplete="off" aria-label="Your answer for question ${i+1}" value="${s?s.ans:''}" ${locked?'disabled':''}><button class="btn primary" data-cq="${sec}|${i}" data-check="1" ${locked?'disabled':''}>Check</button></div>`;
+    const fb=s?(s.error?'<div class="qfb no" role="status"><strong>Answer needed.</strong> Enter a numeric value, then check again.</div>':`<div class="qfb ${s.ok?'ok':'no'}" role="status"><strong>${s.ok?'Correct!':'Incorrect.'}</strong> ${q.e}</div>`):'';
     return `<div class="qcard"><div class="qh"><span class="qn">Q${i+1}</span><span>${q.q}</span></div>${body}${fb}</div>`;
   }).join('');
   box.innerHTML=h;
-  if(Object.values(st).length===Q.length&&!done.has(sec)){done.add(sec);refreshProgress();}
+  typeset(box);
+  if(Object.values(st).filter(s=>!s.error).length===Q.length&&!done.has(sec)){done.add(sec);refreshProgress();}
 }
 
 document.addEventListener('click',e=>{
@@ -1321,8 +1437,8 @@ document.addEventListener('click',e=>{
   const [sec,i]=b.dataset.cq.split('|');const q=CHECKS[sec][+i];cstate[sec]=cstate[sec]||{};
   if(q.t==='mcq'){const k=+b.dataset.k;cstate[sec][i]={ans:k,ok:k===q.a};}
   else{
-    const val=parseFloat($('#ci-'+sec+'-'+i).value);
-    cstate[sec][i]={ans:$('#ci-'+sec+'-'+i).value,ok:Math.abs(val-q.a)<0.005};
+    const raw=$('#ci-'+sec+'-'+i).value.trim(),val=Number(raw);
+    cstate[sec][i]=raw===''||!Number.isFinite(val)?{ans:raw,ok:false,error:true}:{ans:raw,ok:Math.abs(val-q.a)<0.005};
   }
   store.set('m1c10-checks',cstate);
   renderCheck(sec);
@@ -1336,6 +1452,13 @@ if(nb){
   nb.value=store.get('m1c10-notes','');
   nb.addEventListener('input',()=>store.set('m1c10-notes',nb.value));
 }
+
+document.addEventListener('mathjax-ready',()=>{
+  const s=SECS.find(x=>x.id===cur.sec);
+  if(!s)return;
+  typeset(s.el.querySelector('.head'));
+  typeset(s.pages.find(x=>x.dataset.key===cur.page));
+});
 
 /* Route to hash */
 const h=(location.hash||'').slice(1);
